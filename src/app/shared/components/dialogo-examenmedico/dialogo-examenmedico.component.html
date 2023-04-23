@@ -1,0 +1,79 @@
+<!--<h4 mat-dialog-title class="dialog-headline">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+  <br>
+  <div class="container-fluid">
+    <form [formGroup]="datosBasicosFormGroup" class="form-horizontal" (ngSubmit)='confirmado()'>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha inicio y fin confirmada</mat-label>
+            <mat-date-range-input [rangePicker]="pickerR">
+              <input matStartDate placeholder="Fecha inicio" id="fiConfirmada" [formControl]="fxInicioDisponibilidad">
+              <input matEndDate placeholder="Fecha fin" id="ffConfirmada" [formControl]="fxFinDisponibilidad">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickerR"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickerR></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Clínica EMO</mat-label>
+            <mat-select [formControl]="fkClinicaEMO">
+              <mat-option *ngFor="let md of clinicas" [value]="md.idMaestroDetalle">
+                {{md.stNombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha cita EMO</mat-label>
+            <input matInput [matDatepicker]="picker" [formControl]="fxSolicitudEMO">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Hora cita</mat-label>
+            <input matInput [formControl]="horaSolicitudEMO">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha disponibilidad postulante</mat-label>
+            <input matInput value={{fxDisponibilidadPostulante}} readonly>
+        </mat-form-field>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <button mat-raised-button class="btn btn-primary">
+            <mat-icon>check</mat-icon>
+            Guardar
+          </button>
+          <button mat-raised-button class="btn btn-info" (click)="cerrarDialogo()">
+            <mat-icon>block</mat-icon>
+            Cancelar
+          </button>
+        </div>
+      </div>
+      <br>
+    </form>
+  </div>
+</div>-->

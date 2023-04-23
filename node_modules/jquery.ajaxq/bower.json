@@ -1,0 +1,26 @@
+{
+  "name": "jquery.ajaxq",
+  "version": "0.5.2",
+  "homepage": "https://github.com/shults/jquery.ajaxq",
+  "authors": [
+    "Yaroslav Kotsur <yarikkotsur@gmail.com>"
+  ],
+  "description": "jQuery plugin for AJAX queueing. This plugin can be used also with Zepto.js.",
+  "main": "build/jquery.ajaxq.js",
+  "keywords": [
+    "jquery",
+    "ajax",
+    "queue",
+    "zepto",
+    "jqXHR",
+    "ajaxq",
+    "promise"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ]
+}

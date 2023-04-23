@@ -1,0 +1,40 @@
+<div class="container">
+  <h2>Postulantes</h2>
+
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="stNombreApellidos">Nombre Apellidos</label>
+        <input type="text" class="form-control" id="stNombreApellidos" name="stNombreApellidos" placeholder="">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="stNumeroDocumento">Numero Documento</label>
+        <input type="text" class="form-control" id="stNumeroDocumento" name="stNumeroDocumento" placeholder="">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="cmbProveedor">Proveedor</label>
+        <select id="cmbProveedor" name="cmbProveedor" class="form-control">
+          <option value="0" selected>Choose...</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="cmbGradoInstruccion">Grado Instruccion</label>
+        <select id="cmbGradoInstruccion" name="cmbGradoInstruccion" class="form-control">
+          <option  value="0" selected>Choose...</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group col-md-6">
+        <label for="stTarifa">Tarifa</label>
+        <input type="number" class="form-control" id="stTarifa" name="stTarifa" placeholder="0.00">
+      </div>
+    </div>
+    <button type="button" id="btnGuardar" (click)="guardar()" class="btn btn-primary">Guardar</button>
+
+  </form>
+</div>

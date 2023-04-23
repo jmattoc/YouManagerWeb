@@ -1,0 +1,49 @@
+<h4 mat-dialog-title class="dialog-headline">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}} {{data.idempleado}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+  <div class="container-fluid">
+    <div class="form-horizontal">
+      <form autocomplete="on" [formGroup]="datosBasicosFormGroup" class="form-horizontal w-100 p-md-4 p-4" *ngIf="datosBasicosFormGroup">
+        <div class="row mt-3">
+          <div class="col-md-12 text-center">
+           <h1>¿Desea devolver el activó:  {{data.codigoactivo}} ?</h1>
+          </div>
+        </div>
+        <!--<div class="row mt-3">
+          <div class="col-md-10">
+            <mat-form-field appearance="outline">
+              <mat-label>Buscar Personal</mat-label>
+              <input matInput placeholder="Buscar personal por nombres o apellidos" [(ngModel)]="searchname"
+              formControlName="stamanebuscarpersonal" [formControl]="stamanebuscarpersonal" required >
+              <mat-error *ngIf="datosBasicosFormGroup.get('stamanecodinventario')?.hasError('required')">
+                Debe buscar a quien asignar!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2">
+            <button mat-raised-button class="btn btn-primary btnblackpr float-left"><mat-icon style="font-size: 28px;color: #171260;">search</mat-icon></button>
+          </div>
+        </div>-->
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <button mat-raised-button class="btn btn-primary btn-lg float-right" (click)="cerrarDialogo()">
+              <mat-icon >sentiment_very_dissatisfied</mat-icon>
+              NO</button>
+          </div>
+          <div class="col-md-6">
+            <button mat-raised-button class="btn btn-primary btn-lg float-left" (click)="devolver()">
+              <mat-icon >sentiment_satisfied_alt</mat-icon>
+              SI</button>
+          </div>
+        </div>
+      </form>
+  </div>
+  </div>
+</div>

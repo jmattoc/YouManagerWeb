@@ -1,0 +1,187 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">person_add</i></div>
+                 <h4 class="card-title">PERIODO</h4>
+               </div>
+               <div class="col-md-3">
+                <h2 class="card-title"></h2>
+             </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-accordion class="example-headers-align" multi>
+                  <mat-expansion-panel [expanded]="matexpansionpanelfiltro">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Filtro Búsqueda
+                      </mat-panel-title>
+                      <mat-panel-description>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <form autocomplete="on" [formGroup]="formulario" *ngIf="formulario">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Fecha inicio y Fecha Fin</mat-label>
+                            <mat-date-range-input [rangePicker]="pickerR">
+                              <input matStartDate placeholder="Fecha inicio" formControlName="fxInicio" [(ngModel)]="fechainicio">
+                              <input matEndDate placeholder="Fecha fin" formControlName="fxFin" [(ngModel)]="fechafin">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="pickerR"></mat-datepicker-toggle>
+                            <mat-date-range-picker #pickerR></mat-date-range-picker>
+                          </mat-form-field>
+                        </div>
+
+                      <!--  <div class="col-md-4" *ngIf="showestado">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Estado</mat-label>
+                            <mat-select formControlName="fkMdEstado" [(ngModel)]="estadotxt">
+                              <mat-option *ngFor="let estado of estadocategoria" [value]="estado.value" >
+                                {{estado.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>-->
+                        <div class="col-md-6">
+                          <button mat-raised-button class="btn btn-warning float-right">
+                            <mat-icon>delete</mat-icon>
+                            Limpiar
+                          </button>
+                          <button mat-raised-button class="btn btn-primary float-right" (click)="searchperfil(1,10)" >
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-expansion-panel>
+                  <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Bandeja de periodo
+                      </mat-panel-title>
+                      <mat-panel-description>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="form-group row tablecustom">
+                      <mat-sidenav-container fxFlex="0 1 auto">
+                        <mat-sidenav-content>
+                          <div class="row mt-3">
+                            <div class="col-md-12">
+                             <!-- <button mat-raised-button class="btn float-right" routerLink="/contrato/nuevo">
+                                Nuevo Puesto
+                              </button>-->
+                              <button mat-raised-button class="btn float-right" (click)="openmsg()">
+                                <mat-icon>verified_user</mat-icon>
+                                Crear periodo
+                              </button>
+
+                            </div>
+                          </div>
+                          <div class="table-container mt-3" *ngIf="listarperiodo !=null">
+                            <table mat-table [dataSource]="listarperiodo.data" class="mat-elevation-z8">
+                              <ng-container matColumnDef="stmenu" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef> Menu </th>
+                                <td mat-cell *matCellDef="let element">
+                                  <!-- <div *ngIf="element.estado =='Inactivo'">
+                                     <mat-menu #appMenu="matMenu" >
+                                      <button (click)="activarperiodo(element.id)" style="font-size: 12px;" mat-menu-item  >
+                                        <mat-icon style="font-size: 15px; margin:5px 0 0 0;">check</mat-icon> Activar
+                                      </button>
+                                     </mat-menu>
+                                        <a style="cursor:pointer;color: #979797;" mat-icon-button
+                                  [matMenuTriggerFor]="appMenu">
+                                  <mat-icon>more_vert</mat-icon>
+                                         </a>
+                                   </div>-->
+                                   <div *ngIf="element.estado =='Inactivo'">
+                                    <a style="color: #979797;"
+                                    >
+                                    <mat-icon>more_vert</mat-icon>
+                                           </a>
+
+                                  </div>
+                                   <div *ngIf="element.estado =='Activo'" >
+                                      <mat-menu #appMenu="matMenu" >
+                                          <button (click)="desactivarperiodo(element.id)" style="font-size: 12px;" mat-menu-item >
+                                          <mat-icon style="font-size: 15px; margin:5px 0 0 0;">visibility</mat-icon> Inactivar
+                                        </button>
+                                       </mat-menu>
+                                       <a style="cursor:pointer;color: #979797;" mat-icon-button
+                                  [matMenuTriggerFor]="appMenu">
+                                  <mat-icon>more_vert</mat-icon>
+                                         </a>
+                                   </div>
+                                 </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stnombre">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150"> Nombre </th>
+                               <!-- <td mat-cell *matCellDef="let element" class="table-column-150">
+                                  {{element.nombre}}
+                                </td>-->
+                                <td mat-cell *matCellDef="let element" class="table-column-150">
+                                  <a href="/configuracion/newperiodo/{{element.id}}">{{element.nombre}}</a>
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stfechainicio">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-180"> Fecha de Inicio </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-180 colcustom"> {{element.fechaInicio | date:'dd/MM/yyyy hh:mm
+                                  a'}}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="stfechafin">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-180"> Fecha de fin </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-180 colcustom"> {{element.fechaFin | date:'dd/MM/yyyy hh:mm
+                                  a'}}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="stestado">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-180"> Estado </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-180 colcustom"> {{element.estado}}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="FxRegistro">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-180"> Fecha de registro </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-180 colcustom"> {{element.fechaRegistro | date:'dd/MM/yyyy hh:mm
+                                  a'}}</td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                              <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+                              <tr class="mat-row no-data-row" *matNoDataRow>
+                              <td class="mat-cell" colspan="5">No se encontraron registro.</td>
+                              </tr>
+                            </table>
+                            <div *ngIf="isLoading" class="spinner-container">
+                              <mat-progress-spinner
+                                [diameter]="50"
+                                color="primary"
+                                mode="indeterminate">
+                              </mat-progress-spinner>
+                            </div>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 100]" [pageSize]="listarperiodo.pageSize" howFirstLastButtons
+                                  [length]="listarperiodo.totalPages" (page)="onPaginateChange($event)">
+                            </mat-paginator>
+                          </div>
+                        </mat-sidenav-content>
+                      </mat-sidenav-container>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

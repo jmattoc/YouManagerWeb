@@ -1,0 +1,7 @@
+
+@media print {
+  .scctitle {
+    font-size: 20px;
+    color: red !important;
+  }
+}

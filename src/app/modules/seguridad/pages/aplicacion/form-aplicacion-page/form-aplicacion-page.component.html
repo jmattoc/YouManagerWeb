@@ -1,0 +1,147 @@
+<form autocomplete="on" [formGroup]="formulario" (ngSubmit)="guardar()" *ngIf="formulario">
+  <div class="row">
+    <div class="col-md-12">
+        <button mat-raised-button class="btn">Guardar<mat-icon>save</mat-icon></button>
+        <a class="btn btn-info" mat-raised-button [routerLink]="['/seguridad/bandApp']">Cancelar<mat-icon>block</mat-icon></a>
+    </div>
+  </div>
+  <fieldset class="form-group border p-3">        
+      <div class="row">
+          <div class="col-md-3">
+              <mat-form-field appearance="outline">
+                  <mat-label>Codigo</mat-label>
+                  <input matInput formControlName="Codigo">
+                  <mat-error *ngIf="formulario.controls['Codigo'].hasError('required')">
+                      Este campo es obligatorio
+                  </mat-error>
+                  <mat-error *ngIf="formulario.controls['Codigo'].hasError('minlength')">
+                    Este campo debe contener 3 caracteres como mínimo
+                  </mat-error>                  
+                  <mat-error *ngIf="formulario.controls['Codigo'].hasError('maxlength')">
+                    Este campo debe contener 50 caracteres como máximo
+                  </mat-error>
+              </mat-form-field>
+           </div>           
+          <div class="col-md-3">
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="Nombre">
+                <mat-error *ngIf="formulario.controls['Nombre'].hasError('required')">
+                    Este campo es obligatorio
+                </mat-error>
+                <mat-error *ngIf="formulario.controls['Nombre'].hasError('minlength')">
+                  Este campo debe contener 3 caracteres como mínimo
+                </mat-error>                  
+                <mat-error *ngIf="formulario.controls['Nombre'].hasError('maxlength')">
+                  Este campo debe contener 50 caracteres como máximo
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+              <mat-label>NombreCompleto</mat-label>
+              <input matInput formControlName="NombreCompleto">
+              <mat-error *ngIf="formulario.controls['NombreCompleto'].hasError('required')">
+                  Este campo es obligatorio
+              </mat-error>
+              <mat-error *ngIf="formulario.controls['NombreCompleto'].hasError('minlength')">
+                Este campo debe contener 3 caracteres como mínimo
+              </mat-error>                  
+              <mat-error *ngIf="formulario.controls['NombreCompleto'].hasError('maxlength')">
+                Este campo debe contener 50 caracteres como máximo
+              </mat-error>
+          </mat-form-field>
+      </div>
+          <div class="col-md-3">
+              <mat-form-field appearance="outline">
+                  <mat-label>Código acceso</mat-label>
+                  <input matInput formControlName="CodigoAcceso">
+                  <mat-error *ngIf="formulario.controls['CodigoAcceso'].hasError('required')">
+                      Este campo es obligatorio
+                  </mat-error> 
+                  <mat-error *ngIf="formulario.controls['CodigoAcceso'].hasError('minlength')">
+                    Este campo debe contener 3 caracteres como mínimo
+                  </mat-error>                  
+                  <mat-error *ngIf="formulario.controls['CodigoAcceso'].hasError('maxlength')">
+                    Este campo debe contener 50 caracteres como máximo
+                  </mat-error>
+              </mat-form-field>
+          </div> 
+      </div>  
+
+
+
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field appearance="outline">
+              <mat-label>JwtKey</mat-label>
+              <input matInput formControlName="JwtKey">
+              <mat-error *ngIf="formulario.controls['JwtKey'].hasError('required')">
+                Este campo es obligatorio
+              </mat-error> 
+              <mat-error *ngIf="formulario.controls['JwtKey'].hasError('minlength')">
+                Este campo debe contener 3 caracteres como mínimo
+              </mat-error>                  
+              <mat-error *ngIf="formulario.controls['JwtKey'].hasError('maxlength')">
+                Este campo debe contener 100 caracteres como máximo
+              </mat-error>
+          </mat-form-field>
+         </div>
+         <div class="col-md-3">
+            <mat-form-field appearance="outline">
+                <mat-label>dominioweb</mat-label>
+                <input matInput formControlName="dominioweb">
+                <mat-error *ngIf="formulario.controls['dominioweb'].hasError('required')">
+                    Este campo es obligatorio
+                </mat-error>
+                <mat-error *ngIf="formulario.controls['dominioweb'].hasError('minlength')">
+                  Este campo debe contener 3 caracteres como mínimo
+                </mat-error>                  
+                <mat-error *ngIf="formulario.controls['dominioweb'].hasError('maxlength')">
+                  Este campo debe contener 200 caracteres como máximo
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field appearance="outline">
+                <mat-label>Password Default</mat-label>
+                <input matInput formControlName="passwordDefault">
+                <mat-error *ngIf="formulario.controls['passwordDefault'].hasError('required')">
+                    Este campo es obligatorio
+                </mat-error> 
+                <mat-error *ngIf="formulario.controls['passwordDefault'].hasError('minlength')">
+                  Este campo debe contener 3 caracteres como mínimo
+                </mat-error>                  
+                <mat-error *ngIf="formulario.controls['passwordDefault'].hasError('maxlength')">
+                  Este campo debe contener 50 caracteres como máximo
+                </mat-error>
+            </mat-form-field>
+        </div> 
+        <div class="col-md-3">
+          <mat-checkbox formControlName="Activo">Activo</mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10">                              
+          <mat-form-field appearance="outline">
+            <mat-label>json Email</mat-label>
+            <textarea matInput placeholder="jsonEmail" formControlName="jsonEmail">  </textarea>          
+             <mat-error *ngIf="formulario.controls['jsonEmail'].hasError('required')">
+              Este campo es obligatorio
+            </mat-error>  
+          </mat-form-field>         
+        </div>      
+      </div>
+      <div class="row" *ngIf="this.objRegistro">
+        <div class="col-md-10">                              
+          <mat-form-field appearance="outline">
+            <mat-label>json Version</mat-label>
+            <textarea matInput placeholder="jsonVersion" formControlName="jsonVersion">  </textarea>          
+             <mat-error *ngIf="formulario.controls['jsonVersion'].hasError('required')">
+              Este campo es obligatorio
+            </mat-error>  
+          </mat-form-field>         
+        </div>      
+      </div>
+  </fieldset>
+</form>

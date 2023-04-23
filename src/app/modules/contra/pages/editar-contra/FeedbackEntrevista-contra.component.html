@@ -1,0 +1,60 @@
+<h4 mat-dialog-title class="dialog-headline">
+    <mat-toolbar role="toolbar" class="dialog-header">
+      <span> Resultado entrevista</span>
+      <span class="fx-spacer"></span>
+      <button mat-icon-button (click)="onNoClick()">
+        <mat-icon mat-list-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+  </h4>
+  <div mat-dialog-content>
+    <br>
+    <div class="container-fluid">
+     
+        <div class="row">
+          <div class="col-md-12">
+            <mat-form-field appearance="outline">
+                <mat-label>Resultado</mat-label>
+                <mat-select [(ngModel)]="stResultadoEntrevista">
+                    <mat-option value="Cumple expectativas">Cumple expectativas</mat-option>
+                    <mat-option value="Cumple parcialmente">Cumple parcialmente</mat-option>
+                    <mat-option value="Sobre calificado">Sobre calificado</mat-option>
+                    <mat-option value="No cumple expectativas">No cumple expectativas</mat-option> 
+                </mat-select>
+            </mat-form-field>    
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Seleccione una prioridad</h5>
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="inPrioridad">
+                    <mat-radio-button color="primary" value="1" style="margin-left: 16px;">1</mat-radio-button>
+                    <mat-radio-button color="primary" value="2" style="margin-left: 16px;">2</mat-radio-button>
+                    <mat-radio-button color="primary" value="3" style="margin-left: 16px;">3</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-checkbox color="primary" [(ngModel)]="esElegido">Elegir postulante</mat-checkbox>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <button mat-raised-button class="btn btn-primary" (click)="guardar()" cdkFocusInitial>
+              <mat-icon>check</mat-icon>
+              Guardar
+            </button>
+            <button mat-raised-button class="btn btn-info" (click)="onNoClick()">
+              <mat-icon>block</mat-icon>
+              Cancelar
+            </button>
+          </div>
+        </div>
+        <br>
+      
+    </div>
+  </div>
+  

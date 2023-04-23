@@ -1,0 +1,77 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">mobile_friendly</i></div>
+                 <h4 class="card-title">
+                  {{titulo}}
+                </h4>
+               </div>
+             </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="true">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          {{ subtitulo }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <form autocomplete="on" [formGroup]="formularionewcategoria" class="form-horizontal w-100 p-md-4 p-4" (ngSubmit)="guardarconcepto()">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <button mat-raised-button class="btn btn-info"  routerLink="/configuracion/concepto">
+                                <mat-icon>block</mat-icon>
+                                Cancelar
+                              </button>
+                              <button mat-raised-button class="btn btn-primary">
+                                {{btnguar}}
+                              </button>
+                            </div>
+                          </div>
+                          <fieldset class="form-group p-3">
+                            <legend class="w-auto px-2">DATOS GENERALES</legend>
+                            <div class="row mt-3">
+                              <div class="col-md-10">
+                                <h1 style="color:mediumblue; font-zise:20px !important;font-weight: 500; margin-left: 10px; margin-top:10px"> {{ periodotxt }}</h1>
+                             </div>
+                            </div>
+                          <div class="row mt-3">
+                            <div class="col-md-10">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Nuevo concepto</mat-label>
+                                <input matInput [(ngModel)]="newobjetivo"
+                                formControlName="stamanewobjetivo" [formControl]="stamanewobjetivo" required>
+                                <mat-error *ngIf="stamanewobjetivo.get('stamanewobjetivo')?.hasError('required')">
+                                  Es necesario completar el nombre del nuevo Objetivo!
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </fieldset>
+
+                      </form>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

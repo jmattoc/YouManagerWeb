@@ -1,0 +1,90 @@
+<button mat-raised-button class="btn float-right tm-3"  [routerLink]="['/puestoperfil/newcategoria']">
+  <mat-icon>verified_user</mat-icon>
+  Asignar penalidad
+</button>
+<div class="table-container mt-5">
+  <table mat-table [dataSource]="" class="mat-elevation-z8">
+    <!--<ng-container matColumnDef="menu" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef> Menu </th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.estado =='Pre-Aprobado' || element.estado =='Observado'">
+        <mat-menu #appMenu="matMenu" >
+          <button  style="font-size: 12px;" mat-menu-item >
+            <mat-icon style="font-size: 15px; margin:5px 0 0 0;">check</mat-icon> Seleccionar
+          </button>
+          <button  style="font-size: 12px;" mat-menu-item queryParamsHandling="merge">
+            <mat-icon style="font-size: 15px; margin:5px 0 0 0;">visibility</mat-icon> Devolver
+          </button>
+
+        </mat-menu>
+        <a style="cursor:pointer;color: #979797;" mat-icon-button
+          [matMenuTriggerFor]="appMenu">
+          <mat-icon>more_vert</mat-icon>
+        </a>
+      </div>
+      <div *ngIf="element.estado =='Aprobado'"><mat-icon class="white-icon"> insert_emoticon</mat-icon></div>
+      <div *ngIf="element.estado =='Observado'">
+        <mat-menu #appMenu="matMenu" >
+          <button  style="font-size: 12px;" mat-menu-item >
+            <mat-icon style="font-size: 15px; margin:5px 0 0 0;">check</mat-icon> Aprobar
+          </button>
+        </mat-menu>
+      </div>
+      </td>
+    </ng-container>-->
+    <ng-container matColumnDef="StFecha">
+      <th mat-header-cell *matHeaderCellDef class="table-column-150"> Fecha </th>
+      <td mat-cell *matCellDef="let element" class="table-column-150">
+          {{element.nombre}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="stCipUsuario" >
+      <th mat-header-cell *matHeaderCellDef class="table-column-150"> CIP Usuario </th>
+      <td mat-cell *matCellDef="let element" class="table-column-150 colcustom">
+        {{element.categoria}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="stAccion">
+      <th mat-header-cell *matHeaderCellDef class="table-column-350"> Acción </th>
+      <td mat-cell *matCellDef="let element" class="table-column-450 colcustom"> {{element.funcionesPuesto}} </td>
+    </ng-container>
+    <ng-container matColumnDef="stNombreUsuario">
+      <th mat-header-cell *matHeaderCellDef class="table-column-80"> Nombre de Usuario </th>
+      <td mat-cell *matCellDef="let element" class="table-column-150 colcustom"> {{element.estado}} </td>
+    </ng-container>
+    <ng-container matColumnDef="stAutorizador">
+      <th mat-header-cell *matHeaderCellDef class="table-column-180"> Autorizador </th>
+      <td mat-cell *matCellDef="let element" class="table-column-180 colcustom"> {{element.fechaRegistro
+        | date:'dd/MM/yyyy hh:mm
+        a' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="stCeco">
+      <th mat-header-cell *matHeaderCellDef class="table-column-150">CeCo </th>
+      <td mat-cell *matCellDef="let element" class="table-column-150">
+          {{element.motivoObservado}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="StProyectogerencia">
+      <th mat-header-cell *matHeaderCellDef class="table-column-150">Proyecto / Gerencia </th>
+      <td mat-cell *matCellDef="let element" class="table-column-150">
+          {{element.motivoObservado}}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    <tr class="mat-row no-data-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">No se encontraron registro.</td>
+    </tr>
+  </table>
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-progress-spinner
+      [diameter]="50"
+      color="primary"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]" [pageSize]="" showFirstLastButtons
+[length]="" >
+</mat-paginator>
+
+</div>

@@ -1,0 +1,244 @@
+<mat-drawer-container class="example-container">
+    <mat-drawer #drawer [mode]="mode.value" class="example-sidenav" position="end" style="width: 35%;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-tab-group>
+                        <mat-tab label="Adjunto(s)">
+
+                            <br>
+                            <div class="container-fluid">
+                                <div class=" row">
+                                    <div class="col-md-12">
+                                        <ngx-dropzone (change)="onSelect($event)"
+                                            accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf">
+                                            <ngx-dropzone-label>Arrastrar y soltar un archivo</ngx-dropzone-label>
+                                        </ngx-dropzone>
+                                    </div>
+                                </div>
+                                <div class=" row">
+                                    <div class="col-md-12">
+                                        <div class="files-list">
+                                            <div class="single-file" *ngFor="let file of dsAdjunto; let i = index">
+                                                <span [ngClass]="{
+                            'icon-pdf': file?.nombreExtension.split('.').pop() === 'pdf' ,
+                            'icon-excel' : file?.nombreExtension.split('.').pop() === 'xlsx',
+                            'icon-word' : file?.nombreExtension.split('.').pop() === 'docx',
+                            'icon-img' : file?.nombreExtension.split('.').pop() === 'png' || file?.nombreExtension.split('.').pop() === 'jpeg' || file?.nombreExtension.split('.').pop() === 'jpg'
+                            }" class=""></span>
+                                                <div style="width: 72%;">
+                                                    <h4 class="stNombreArchivo">
+                                                        {{ file?.stNombreArchivo }}
+                                                    </h4>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p class="size">
+                                                                {{ formatBytes(file?.tamanio) }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p class="size">
+                                                                {{ file?.fxRegistro | date: 'dd/MM/yyyy HH:mm' }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!--<app-progress *ngIf="file.idAdjunto == 0" [progress]="file?.progress"></app-progress>-->
+                                                </div>
+                                                <!--
+                                                <button mat-icon-button aria-label="" (click)="deleteFile(i)">
+                                                    <mat-icon matSuffix>delete</mat-icon>
+                                                </button>
+                                                -->
+                                                <mat-menu #appMenuFile="matMenu">
+                                                    <button (click)="downloadImage(file)" style="font-size: 12px;"
+                                                        mat-menu-item>
+                                                        <mat-icon style="font-size: 15px; margin:5px 0 0 0;">
+                                                            file_download</mat-icon>
+                                                        Descargar
+                                                    </button>
+                                                    <button (click)="deleteImageGenerales(file)"
+                                                        style="font-size: 12px;" mat-menu-item>
+                                                        <mat-icon style="font-size: 15px; margin:5px 0 0 0;">delete
+                                                        </mat-icon>
+                                                        Eliminar
+                                                    </button>
+                                                </mat-menu>
+                                                <a style="cursor:pointer;color: #979797;" mat-icon-button
+                                                    [matMenuTriggerFor]="appMenuFile">
+                                                    <mat-icon>more_vert</mat-icon>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </mat-tab>
+                        <!--<mat-tab label="Historia" >                            
+                        </mat-tab>
+                        <mat-tab label="Comentarios" >
+                        </mat-tab>-->
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content style="overflow: hidden;">
+        <form autocomplete="on" [formGroup]="formulario" (ngSubmit)="guardar()">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" mat-button matTooltip="Adjuntos" (click)="drawer.toggle()"
+                            class="btn btn-just-icon btn-link">
+                            <mat-icon>settings</mat-icon>
+                        </button>
+                        <button mat-raised-button class="btn">
+                            Guardar
+                            <mat-icon>save</mat-icon>
+                        </button>
+                        <a class="btn btn-info" mat-raised-button [routerLink]="['/seguridad/bandusuario']">
+                            Cancelar
+                            <mat-icon>block</mat-icon>
+                        </a>
+                    </div>
+                </div>
+                <fieldset class="form-group  p-3">
+                    <legend class="w-auto px-2">DATOS GENERALES</legend>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Tipo de solicitud</mat-label>
+                                <mat-select>
+                                    <!--<mat-option *ngFor="let tc of tipoSolicitud" [value]="tc.inCodigo">
+                                    {{tc.stNombre}}
+                                </mat-option>-->
+                                    <mat-option>
+                                        Nuevo
+                                    </mat-option>
+                                    <mat-option>
+                                        Renovacion
+                                    </mat-option>
+                                </mat-select>
+                                <!-- <mat-error *ngIf="formulario.controls['fkMdTipoRecurso'].hasError('required')">
+                                Este campo es obligatorio
+                            </mat-error>-->
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Aseguradora</mat-label>
+                                <mat-select>
+                                    <!--<mat-option *ngFor="let tc of tipoSolicitud" [value]="tc.inCodigo">
+                                    {{tc.stNombre}}
+                                </mat-option>-->
+                                    <mat-option>
+                                        La Positiva
+                                    </mat-option>
+                                    <mat-option>
+                                        Pacifico Seguro
+                                    </mat-option>
+                                    <mat-option>
+                                        Rimac Seguro
+                                    </mat-option>
+                                </mat-select>
+                                <!-- <mat-error *ngIf="formulario.controls['fkMdTipoRecurso'].hasError('required')">
+                                Este campo es obligatorio
+                            </mat-error>-->
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Fecha inicio y fin vigencia</mat-label>
+                                <mat-date-range-input [rangePicker]="pickerR">
+                                    <input matStartDate placeholder="Fecha inicio">
+                                    <input matEndDate placeholder="Fecha fin">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="pickerR"></mat-datepicker-toggle>
+                                <mat-date-range-picker #pickerR></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Motivo de solicitud</mat-label>
+                                <textarea matInput placeholder="Motivo de solicitud" matInput rows="3"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group  p-3">
+                    <legend class="w-auto px-2">DATOS DEL PERSONAL</legend>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Filtrar</mat-label>
+                                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button mat-raised-button class="btn" (click)="AbrirModalPersonal()">
+                                Agregar Personal
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table mat-table [dataSource]="dataSource" matSort>
+
+                                <!-- ID Column -->
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nro. </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                                </ng-container>
+
+                                <!-- Progress Column -->
+                                <ng-container matColumnDef="nombre">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="apepaterno">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido Paterno </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.apepaterno}} </td>
+                                </ng-container>
+
+                                <!-- Color Column -->
+                                <ng-container matColumnDef="apematerno">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido Materno </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.apematerno}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="tipodocumento">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo documento </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.tipodocumento}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="nrodocumento">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nro documento </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.nrodocumento}} </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                                <!-- Row shown when there is no matching data. -->
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro "{{input.value}}"</td>
+                                </tr>
+                            </table>
+
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </mat-drawer-content>
+</mat-drawer-container>

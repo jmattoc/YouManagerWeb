@@ -1,0 +1,116 @@
+<h4 mat-dialog-title class="dialog-headline">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+  <div class="container-fluid">
+    <div class="form-horizontal">
+      <form autocomplete="on" [formGroup]="datosBasicosFormGroup" class="form-horizontal w-100 p-md-4 p-4">
+        <div class="row">
+          <div class="col-md-12">
+            <fieldset class="form-group p-3">
+              <legend class="w-auto px-2">DATOS GENERALES</legend>
+              <div class="row mt-3">
+                <div class="col-md-3">
+                 <mat-form-field appearance="outline">
+                   <mat-label>CIP</mat-label>
+                   <input matInput [(ngModel)]="CIPtxt"
+                   formControlName="stamanecip" [formControl]="stamanecip">
+                 </mat-form-field>
+                </div>
+               <div class="col-md-6">
+                 <mat-form-field appearance="outline">
+                  <mat-label>Apellidos o nombres</mat-label>
+                  <input matInput [(ngModel)]="rptempleado" style="color:#156185; font-weight: 500;"
+                  formControlName="stamaneAppNombResp" [formControl]="stamaneAppNombResp">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <h2 for=""style="color:#156185;" >{{ codigo_Empleado }} </h2>
+            </div>
+
+              </div>
+              <div class="row">
+               <div class="col-md-3">
+                   <mat-form-field appearance="outline">
+                    <mat-label>Tipo ausencia</mat-label>
+                    <input matInput [(ngModel)]="tipoAusenciaIDtxt" style="color:#156185; font-weight: 500;"
+                    formControlName="stmanetipoAusencia" [formControl]="stmanetipoAusencia">
+                  </mat-form-field>
+               </div>
+               <div class="col-md-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>Aprobador</mat-label>
+                  <input matInput [(ngModel)]="txtaprobador"
+                  formControlName="stamaneaprobador" [formControl]="stamaneaprobador"  style="color:#156185; font-weight: 500;">
+                </mat-form-field>
+               </div>
+               <div class="col-md-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <input matInput [(ngModel)]="respEstado"
+                  formControlName="fkMdEstado" [formControl]="fkMdEstado"  style="color:#156185; font-weight: 500;">
+                </mat-form-field>
+               </div>
+              </div>
+           </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <fieldset class="form-group p-3">
+              <legend class="w-auto px-2">AUSENCIA PROGRAMADA</legend>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Fecha inicio y Fecha Fin</mat-label>
+                    <mat-date-range-input [rangePicker]="pickerR">
+                      <input matStartDate placeholder="Fecha inicio" formControlName="fxInicio" [(ngModel)]="fechainicio" #dateRangeStart  style="color:#156185; font-weight: 500;">
+                      <input matEndDate placeholder="Fecha fin" formControlName="fxFin" [(ngModel)]="fechafin"  #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"  style="color:#156185; font-weight: 500;">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="pickerR"></mat-datepicker-toggle>
+                    <mat-date-range-picker #pickerR></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                      <h3  style="color:#156185;">Días solicitados <label for="" style="color: brown;font: size 25px;">{{ mostrasdias }}</label>.</h3>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-md-9">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Comentarios</mat-label>
+                    <textarea matInput placeholder="" formControlName="stamanecomentario" [formControl]="stamanecomentario"[(ngModel)]="txtcomentario"  style="color:#156185; font-weight: 500;"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group p-3">
+              <legend class="w-auto px-2">MOTIVO DE RECHAZO</legend>
+              <div class="row mt-3">
+                <div class="col-md-8">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Motivo</mat-label>
+                    <textarea matInput placeholder="" formControlName="stamanerechazo" [formControl]="stamanerechazo"[(ngModel)]="txtrechazo"  style="color:#156185; font-weight: 500;" ></textarea>
+
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <button mat-raised-button class="btn btn-primary float-right" (click)="ObservarAusencia()">
+                    Rechazar Ausencia
+                  </button>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

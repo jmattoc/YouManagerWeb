@@ -1,0 +1,309 @@
+<div class="main content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">mobile_friendly</i></div>
+                 <h4 class="card-title">
+                  Objetivo valor
+                </h4>
+               </div>
+             </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-tab-group animationDuration = "2000ms">
+                  <mat-tab [label]="subtitulo" >
+                    <form autocomplete="on" [formGroup]="datosBasicosFormGroup" class="form-horizontal w-100 p-md-4 p-4" (ngSubmit)="guardarobjvalor(formDirective)" #formDirective="ngForm">
+                        <div clas="row mt-3">
+                        <div class="col-md-12">
+                          <button mat-raised-button class="btn btn-info"  routerLink="/reco/objvalor">
+                            <mat-icon>block</mat-icon>
+                            Cancelar
+                          </button>
+                          <h1 style="color:mediumblue; font-zise:20px !important;font-weight: 500; margin-left: 10px; float: right;">{{ periodotxt }}</h1>
+                        </div>
+
+
+                        </div>
+
+                        <div class="row mt-3">
+                          <div class="col-md-4">
+                            <fieldset class="form-group p-3">
+                              <legend class="w-auto px-2">DATOS DE NIVEL</legend>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                                    <!-- This is the tree node template for leaf nodes -->
+                                    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                                      <!-- use a disabled button to provide padding for tree leaf -->
+                                      <button mat-icon-button (click)="lstresponsable(node.nombre.split('|')[1],$event)">
+                                        {{node.nombre.split('|')[0]}}
+                                      </button>
+
+                                    </mat-tree-node>
+                                    <!-- This is the tree node template for expandable nodes -->
+                                    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+                                      <button mat-icon-button matTreeNodeToggle (click)="lstresponsable(node.nombre.split('|')[1],$event)"
+                                              [attr.aria-label]="'Toggle ' + node.nombre">
+                                        <mat-icon class="mat-icon-rtl-mirror">
+                                          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                        </mat-icon>
+
+                                        {{node.nombre.split('|')[0]}}
+                                      </button>
+
+                                      <mat-progress-bar *ngIf="node.isLoading"
+                                                        mode="indeterminate"
+                                                        class="example-tree-progress-bar">
+                                      </mat-progress-bar>
+                                    </mat-tree-node>
+                                  </mat-tree>
+                                </div>
+                              </div>
+                            </fieldset>
+                            <div class="row mt-3">
+                              <div class="col-md-12">
+                                <h5 *ngIf="showmostrarubi" style="color:#156185; margin-left:15px;">Usted a selecionado:  {{UbicacionNomnbretree}} </h5>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8">
+                            <fieldset class="form-group p-3">
+                              <legend class="w-auto px-2">DATOS DE VALOR Y PESO</legend>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Responsable</mat-label>
+                                    <input matInput [(ngModel)]="responsabletxt"
+                                    formControlName="stamaneResponsable" [formControl]="stamaneResponsable" required>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamaneResponsable')?.hasError('required')">
+                                      Es necesario completar el Responsable!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Objetivo concepto</mat-label>
+                                    <mat-select formControlName="stmaneslecobjconcepto"  required [(ngModel)]="objconceptotxt" (selectionChange)="chaneidobjconpceptop($event)">
+                                      <mat-option *ngFor="let lista of listarconcepobjactivos" [value]="lista.id">
+                                        {{lista.nombre}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmaneslecobjconcepto')?.hasError('required')">
+                                      Seleccione el estado!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Debe ser</mat-label>
+                                    <mat-select formControlName="stmanesdebeser"  required [(ngModel)]="objconpint" (selectionChange)="chaneidobjconp($event)">
+                                      <mat-option *ngFor="let estado of lsitaroperdadormaestro" [value]="estado.idMaestroDetalle">
+                                        {{estado.stNombre}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanesdebeser')?.hasError('required')">
+                                      Seleccione el operador!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Valor Obj S./</mat-label>
+                                    <input matInput [(ngModel)]="valorobjsolestxt"
+                                    formControlName="stamanevalorobjsoles" [formControl]="stamanevalorobjsoles" required>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamanevalorobjsoles')?.hasError('required')">
+                                      Ingresar monto!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Unidad. M</mat-label>
+                                    <mat-select formControlName="stmaneslecUnidadmedida"  required [(ngModel)]="unidadmedidaidtxt" (selectionChange)="chaneUmedida($event)">
+                                      <mat-option *ngFor="let estado of lstarunidadmedidamestro" [value]="estado.idMaestroDetalle">
+                                        {{estado.stNombre}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmaneslecUnidadmedida')?.hasError('required')">
+                                      Seleccione unidad medida!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Peso %</mat-label>
+                                    <input matInput [(ngModel)]="pesotxt"
+                                    formControlName="stamanePeso" [formControl]="stamanePeso" required>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamanePeso')?.hasError('required')">
+                                     Completar el peso!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <mat-form-field appearance="outline">
+                                  <mat-label>Periocidad de Evaluación</mat-label>
+                                    <mat-select formControlName="stmaneslecperiodo"  required [(ngModel)]="periodoidtxt" (selectionChange)="chaneperiodoid($event)">
+                                      <mat-option *ngFor="let estado of listarperidomes" [value]="estado.value">
+                                        {{estado.name}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmaneslecperiodo')?.hasError('required')">
+                                      Seleccione el periodicidad!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                  <button mat-raised-button class="btn btn-primary float-right">
+                                    {{btnguar}}
+                                  </button>
+                                </div>
+                              </div>
+                             <!-- <div class="row">
+                                <div class="col-md-9">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Responsable</mat-label>
+                                    <input matInput [(ngModel)]="responsabletxt" style="color: blue;"
+                                    formControlName="stamaneResponsable" [formControl]="stamaneResponsable" required>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamaneResponsable')?.hasError('required')">
+                                      Es necesario completar el Responsable!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Periodicidad de Evaluación</mat-label>
+                                      <mat-select formControlName="stmaneslecperiodo"  required [(ngModel)]="periodoidtxt" (selectionChange)="chaneperiodoid($event)">
+                                        <mat-option *ngFor="let estado of listarperidomes" [value]="estado.value">
+                                          {{estado.name}}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error *ngIf="datosBasicosFormGroup.get('stmaneslecperiodo')?.hasError('required')">
+                                        Seleccione el periodicidad!
+                                      </mat-error>
+                                    </mat-form-field>
+                                </div>
+                              </div>
+                             <div class="table-container mt-3" *ngIf="listarconcepobjactivos !=null">
+                                    <table mat-table [dataSource]="listarconcepobjactivos" class="mat-elevation-z8" style="font-size:10px;">
+                                      <ng-container matColumnDef="stConceptoObj" style="font-size:8px;" >
+                                        <th mat-header-cell *matHeaderCellDef >Concepto</th>
+                                        <td mat-cell *matCellDef="let element" style="font-size:8px; ">
+                                          <div *ngIf="element.estado == 'Activo'"> {{element.nombre}}</div>
+
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="stDebeser" >
+                                        <th mat-header-cell *matHeaderCellDef>Debe ser</th>
+                                        <td mat-cell *matCellDef="let element" style="margin-left: 5px;" >
+                                          <mat-form-field>
+                                            <mat-select formControlName="stConceptoObj"  required  (selectionChange)="chaneidobjconp($event)">
+                                              <mat-option *ngFor="let estado of lsitaroperdadormaestro" [value]="estado.idMaestroDetalle" style="font-size:8px;">
+                                                {{estado.stNombre}}
+                                              </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="datosBasicosFormGroup.get('stConceptoObj')?.hasError('required')">
+                                              Seleccione la opción!
+                                            </mat-error>
+                                          </mat-form-field>
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="stvalor" >
+                                        <th mat-header-cell *matHeaderCellDef class="table-column-flex">valor</th>
+                                        <td mat-cell *matCellDef="let element" class="table-column-flex">
+                                          <mat-form-field>
+                                            <mat-label>Valor Obj S./</mat-label>
+                                            <input matInput [(ngModel)]="valorobjsolestxt"
+                                            formControlName="tbnamevalorsoles" [formControl]="tbnamevalorsoles" required style="font-size:8px;">
+                                            <mat-error *ngIf="datosBasicosFormGroup.get('tbnamevalorsoles')?.hasError('required')">
+                                              Ingresar monto!
+                                            </mat-error>
+                                          </mat-form-field>
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="stUmedida" >
+                                        <th mat-header-cell *matHeaderCellDef class="table-column-flex">Unid. Medica</th>
+                                        <td mat-cell *matCellDef="let element" class="table-column-flex">
+                                          <mat-form-field >
+                                            <mat-label>Unidad. M</mat-label>
+                                            <mat-select formControlName="stmaneslecUnidadmedida"  required [(ngModel)]="unidadmedidaidtxt" (selectionChange)="chaneUmedida($event)" style="font-size:8px;">
+                                              <mat-option *ngFor="let estado of lstarunidadmedidamestro" [value]="estado.idMaestroDetalle">
+                                                {{estado.stNombre}}
+                                              </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="datosBasicosFormGroup.get('stmaneslecUnidadmedida')?.hasError('required')">
+                                              Seleccione unidad medida!
+                                            </mat-error>
+                                          </mat-form-field>
+                                        </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="stpeso" >
+                                        <th mat-header-cell *matHeaderCellDef class="table-column-flex">Peso</th>
+                                        <td mat-cell *matCellDef="let element" class="table-column-flex">
+                                          <mat-form-field style=" width:70px important ;">
+                                            <mat-label>Peso %</mat-label>
+                                            <input matInput [(ngModel)]="pesotxt"
+                                            formControlName="stamanePeso" [formControl]="stamanePeso" required style="font-size:8px; width:70px ;">
+                                            <mat-error *ngIf="datosBasicosFormGroup.get('stamanePeso')?.hasError('required')">
+                                             Completar el peso!
+                                            </mat-error>
+                                          </mat-form-field>
+                                        </td>
+                                      </ng-container>
+
+                                      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+                                    <tr class="mat-row no-data-row" *matNoDataRow>
+                                      <td class="mat-cell" colspan="5">No se encontraron registro.</td>
+                                    </tr>
+                                    </table>
+                                    <div *ngIf="isLoading" class="spinner-container">
+                                      <mat-progress-spinner
+                                        [diameter]="50"
+                                        color="primary"
+                                        mode="indeterminate">
+                                      </mat-progress-spinner>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-md-12" style="float:right;">
+                                        <button mat-raised-button class="btn btn-primary float-right">
+                                          {{btnguar}}
+                                        </button>
+                                      </div>
+                                    </div>
+
+                               </div>-->
+
+
+
+                            </fieldset>
+                          </div>
+                        </div>
+                      </form>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

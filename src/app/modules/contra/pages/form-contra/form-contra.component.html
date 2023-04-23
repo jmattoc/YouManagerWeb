@@ -1,0 +1,814 @@
+<form autocomplete="on" [formGroup]="formulario" (ngSubmit)="guardar()" *ngIf="formulario">
+    <mat-drawer-container class="example-container">
+        <mat-drawer #drawer [mode]="mode.value" class="example-sidenav" position="end" style="width: 35%;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <mat-tab-group>
+                            <mat-tab label="Adjunto(s)">
+                                <br>
+                                <div class="container-fluid">
+                                    <div class=" row">
+                                        <div class="col-md-12">
+                                            <ngx-dropzone (change)="onSelect($event)"
+                                                accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf">
+                                                <ngx-dropzone-label>Arrastrar y soltar un archivo</ngx-dropzone-label>
+                                            </ngx-dropzone>
+                                        </div>
+                                    </div>
+                                    <div class=" row">
+                                        <div class="col-md-12">
+                                            <div class="files-list">
+                                                <div class="single-file" *ngFor="let file of dsAdjunto; let i = index">
+                                                    <span [ngClass]="{
+                                'icon-pdf': file?.nombreExtension.split('.').pop() === 'pdf' ,
+                                'icon-excel' : file?.nombreExtension.split('.').pop() === 'xlsx',
+                                'icon-word' : file?.nombreExtension.split('.').pop() === 'docx',
+                                'icon-img' : file?.nombreExtension.split('.').pop() === 'png' || file?.nombreExtension.split('.').pop() === 'jpeg' || file?.nombreExtension.split('.').pop() === 'jpg'
+                                }" class=""></span>
+                                                    <div style="width: 72%;">
+                                                        <h4 class="stNombreArchivo">
+                                                            {{ file?.stNombreArchivo }}
+                                                        </h4>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="size">
+                                                                    {{ formatBytes(file?.tamanio) }}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="size">
+                                                                    {{ file?.fxRegistro | date: 'dd/MM/yyyy HH:mm' }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <app-progress *ngIf="file.idAdjunto == 0"
+                                                            [progress]="file?.progress">
+                                                          </app-progress>
+                                                    </div>
+                                                    <!--
+                                                    <button mat-icon-button aria-label="" (click)="deleteFile(i)">
+                                                        <mat-icon matSuffix>delete</mat-icon>
+                                                    </button>
+                                                    -->
+                                                    <mat-menu #appMenuFile="matMenu">
+                                                        <button (click)="downloadImage(file)" style="font-size: 12px;"
+                                                            mat-menu-item>
+                                                            <mat-icon style="font-size: 15px; margin:5px 0 0 0;">
+                                                                file_download</mat-icon>
+                                                            Descargar
+                                                        </button>
+                                                        <button (click)="deleteImageGenerales(file)"
+                                                            style="font-size: 12px;" mat-menu-item>
+                                                            <mat-icon style="font-size: 15px; margin:5px 0 0 0;">delete
+                                                            </mat-icon>
+                                                            Eliminar
+                                                        </button>
+                                                    </mat-menu>
+                                                    <a style="cursor:pointer;color: #979797;" mat-icon-button
+                                                        [matMenuTriggerFor]="appMenuFile">
+                                                        <mat-icon>more_vert</mat-icon>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </mat-tab>
+                            <mat-tab label="Historia" *ngIf="VerTabHistoria">
+                                <table mat-table [dataSource]="dsLogAccion" class="mat-elevation-z8">
+                                    <!-- Weight Column -->
+                                    <ng-container matColumnDef="stAccion">
+                                        <th mat-header-cell *matHeaderCellDef> Acción </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.stAccion}}<br>
+                                            <em>{{element.stUsuarioRegistro}} </em>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="fxRegistro">
+                                        <th mat-header-cell *matHeaderCellDef> Fecha creación </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.fxRegistro | date:'dd/MM/yyyy
+                                            hh:mm a' }}
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="dcLogAccion"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: dcLogAccion;"></tr>
+                                </table>
+                            </mat-tab>
+                            <mat-tab label="Comentarios" *ngIf="VerTabComentario">
+                                <div style="text-align:right; margin: 0 auto;">
+                                    <button type="button" class="fa fa-plus-square btn btn-primary"
+                                        (click)="openPopup()"> Agregar
+                                    </button>
+                                </div>
+                                <table mat-table [dataSource]="dsSolicitudComentario" class="mat-elevation-z8">
+                                    <!-- Weight Column -->
+                                    <!-- Weight Column -->
+                                    <ng-container matColumnDef="Comentario">
+                                        <th mat-header-cell *matHeaderCellDef> Comentario </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.comentario}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="FechaHoraSitema">
+                                        <th mat-header-cell *matHeaderCellDef> Fecha - Hora </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.fechaHoraSitema | date:
+                                            'dd/MM/yyyy
+                                            HH:mm'}} </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="dcSolicitudComentario"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: dcSolicitudComentario;"></tr>
+                                </table>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content style="overflow: hidden;">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" mat-button matTooltip="Adjuntos / Historia / Comentarios (click aquí)"
+                        (click)="drawer.toggle()" class="btn btn-just-icon btn-link">
+                        <mat-icon>settings</mat-icon>
+                    </button>
+                    <button mat-raised-button class="btn" *ngIf="this.isGuardarVisible">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-info" mat-raised-button (click)="SolicitarAprobacion();"
+                        *ngIf="this.isSolicitarAprobVisible">
+                        Solicitar aprobación
+                        <mat-icon>send</mat-icon>
+                    </button>
+
+                    <button type="button" class="btn btn-primary" mat-raised-button (click)="confirmarDisponibilidad();"
+                        *ngIf="this.isConfirmarDisponibilidad">
+                        Confirmar Disponibilidad
+                        <mat-icon>timer</mat-icon>
+                    </button>
+                    <button type="button" class="btn" mat-raised-button (click)="solicitarExamenMedicoOcupacional();"
+                        *ngIf="this.isSolicitarRqAccesos">
+                        Solicitar examen médico ocupacional
+                        <mat-icon>local_hospital</mat-icon>
+                    </button>
+                    <button type="button" class="btn btn-primary" mat-raised-button (click)="registrarRqAccesos();"
+                        *ngIf="false">
+                        Registrar RQ
+                        <mat-icon>save</mat-icon>
+                    </button>
+                    <button type="button" class="btn btn-primary" mat-raised-button (click)="registrarOc();"
+                        *ngIf="this.isVisibleRegistrarOc">
+                        Registrar orden de compra
+                        <mat-icon>save</mat-icon>
+                    </button>
+
+                    <button mat-raised-button class="btn btn-warning" type="button" *ngIf="this.isAprobRechazoVisible"
+                        (click)="Rechazar();">
+                        Rechazar
+                        <mat-icon>remove_circle_outline</mat-icon>
+                    </button>
+                    <button mat-raised-button class="btn btn-primary" type="button" (click)="Aprobar();"
+                        *ngIf="this.isAprobRechazoVisible">
+                        Aprobar
+                        <mat-icon>done</mat-icon>
+                    </button>
+                    <button mat-raised-button type="button" (click)="openPopup()" class="btn btn-primary"
+                        *ngIf="this.isAprobRechazoVisible">
+                        Informar
+                        <mat-icon>alarm_add</mat-icon>
+                    </button>
+                    <a mat-raised-button class="btn btn-info" [routerLink]="['/contrato', 'reg']"
+                        queryParamsHandling="merge">
+                        <mat-icon>block</mat-icon>
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+            <fieldset class="form-group  p-3">
+                <legend class="w-auto px-2">DATOS GENERALES</legend>
+                <div class="row">
+                    <div class="col-md-3">
+                        <mat-form-field color="primary" appearance="outline">
+                            <mat-label>Fecha de Registro</mat-label>
+                            <input matInput [matDatepicker]="pickerRegistro" formControlName="fxRegistro">
+                            <mat-datepicker-toggle matSuffix [for]="pickerRegistro"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerRegistro color="primary"></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                        <!--Autcomplete por defecto esta seteado el dato del usuario logeado-->
+                        <mat-form-field appearance="outline">
+                            <mat-label>Solicitante</mat-label>
+                            <input type="text" matInput [formControl]="myControlSolicitante" class="input-sm"
+                                formControlName="myControlSolicitante" [matAutocomplete]="solicitante" required>
+                            <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                                (click)="searchSolicitante()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <mat-autocomplete panelWidth="240px" #solicitante="matAutocomplete"
+                                [displayWith]="displayFnSolicitante">
+                                <mat-option *ngIf="isLoading" class="autocomplete__option--loading">
+                                    <mat-spinner diameter="20"></mat-spinner>
+                                </mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let option of filteredOptionsSolicitante" [value]="option">
+                                        {{option.NombreCompleto}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="formulario.get('myControlSolicitante')?.hasError('required')">
+                                Es necesario el solicitante!
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tipo de solicitud</mat-label>
+                                    <mat-select formControlName="fkMdTipoRecurso"
+                                        (selectionChange)="onTipoRecursoChange($event)">
+                                        <mat-option *ngFor="let tc of tipoSolicitud" [value]="tc.inCodigo">
+                                            {{tc.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <!-- <mat-error *ngIf="formulario.controls['fkMdTipoRecurso'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>-->
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-7">
+                                <mat-form-field appearance="outline" *ngIf="isVisiblePostulante">
+                                    <mat-label>Nombre Postulante</mat-label>
+                                    <input type="text" matInput [formControl]="controlPostulante"
+                                        [matAutocomplete]="auto">
+                                    <!--<button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                                        (click)="searchPostulante()">
+                                        <mat-icon>search</mat-icon>
+                                    </button>-->
+                                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option *ngFor="let option of filteredPostulantes | async" [value]="option">
+                                            {{option.stNombre}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" *ngIf="isVisibleReemplazado">
+                                    <mat-label>Nombre Recurso reemplazado</mat-label>
+                                    <input matInput formControlName="stReemplazado">
+
+                                    <mat-error *ngIf="formulario.controls['stReemplazado'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf="formulario.controls['stReemplazado'].hasError('minlength')">
+                                        Este campo debe contener 3 caracteres como mínimo
+                                    </mat-error>
+
+                                    <mat-error *ngIf="formulario.controls['stReemplazado'].hasError('maxlength')">
+                                        Este campo debe contener 100 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Gerencia / Área</mat-label>
+                                    <mat-select formControlName="fkProyecto"
+                                        (selectionChange)="onProyectoChange($event)">
+                                        <mat-option *ngFor="let tc of proyecto" [value]="tc.idProyecto">
+                                            {{tc.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkProyecto'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Líder de Generencia / Area</mat-label>
+                                    <input matInput formControlName="stLider">
+                                    <mat-error *ngIf="formulario.controls['stLider'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf="formulario.get('stLider').hasError('minlength')">
+                                        Este campo debe contener 3 caracteres como minimo
+                                    </mat-error>
+                                    <mat-error *ngIf=" formulario.get('stLider').hasError('maxlength')">
+                                        Este campo debe contener 100 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Centro costo</mat-label>
+                                    <mat-select formControlName="fkMdLineaContable">
+                                        <mat-option *ngFor="let md of lineaContable" [value]="md.idMaestroDetalle">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdLineaContable'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Lugar de Trabajo</mat-label>
+                                    <mat-select formControlName="fkAgencia">
+                                        <mat-option *ngFor="let md of agencias" [value]="md.idAgencia">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkAgencia'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <!--<div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Líder del usuario</mat-label>
+                                    <input matInput formControlName="stLiderUsuario">
+                                </mat-form-field>
+
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tipo de Trabajador</mat-label>
+                                    <mat-select formControlName="fkMdTipoTrabajador">
+                                        <mat-option *ngFor="let tc of tipoTrabajador" [value]="tc.inCodigo">
+                                            {{tc.stNombre}}
+                                        </mat-option>
+                                        <!--<mat-option value="option1">Directivo</mat-option>
+                                        <mat-option value="option2">Ejecutivo</mat-option>
+                                        <mat-option value="option3">Empleado</mat-option>-->
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdTipoTrabajador'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tipo de Contrato</mat-label>
+                                    <mat-select formControlName="fkMdTipoContrato">
+                                        <mat-option *ngFor="let tc of tipoContrato" [value]="tc.inCodigo">
+                                            {{tc.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdTipoContrato'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Sueldo mensual</mat-label>
+                                    <input matInput type="number" formControlName="flPresupuestoMensual"
+                                        placeholder="0.00">
+                                    <span matPrefix>S/.&nbsp;</span>
+                                    <mat-error *ngIf="formulario.controls['flPresupuestoMensual'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Sueldo Anuales</mat-label>
+                                    <mat-select formControlName="fkMdSueldoAnuales">
+                                        <mat-option *ngFor="let tc of sueldoAnuales" [value]="tc.inCodigo">
+                                            {{tc.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error *ngIf="formulario.controls['fkMdSueldoAnuales'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <h4 class="col-md-2">Asignaciones:</h4>
+                            <div class="col-md-10">
+                                <ul style=" list-style-type: none;">
+                                    <li *ngFor="let item of asignacionesAlTalento" formArrayName="IdsAsignaciones">
+                                        <mat-checkbox color="primary" [disabled]="item.disabled"
+                                            [checked]="item.completed"
+                                            (change)="updateChkbxArray(item, $event.checked, 'IdsAsignaciones')"
+                                            value="item.inCodigo">
+                                            {{item.stNombre}}
+                                        </mat-checkbox>
+                                    </li>
+                                </ul>
+
+                                <mat-error *ngIf="formulario.controls['IdsAsignaciones'].hasError('required')">
+                                    Por favor seleccione al menos una asignación
+                                </mat-error>
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="isVisibleOc">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Número orden de compra</mat-label>
+                                    <input matInput [formControl]="stCodigoOc">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row" *ngIf="isVisibleRq">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Número RQ</mat-label>
+                                    <input matInput [formControl]="stCodigoRq">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="IsDisponibilidadPostulante">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Fecha disponibilidad postulante</mat-label>
+                                    <input matInput value={{fxDisponibilidadPostulante}}>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group  p-3" *ngIf="isVisibleRangoDisponibilidad">
+                <legend class="w-auto px-2">DATOS EXAMEN MÉDICO OCUPACIONAL</legend>
+
+                <div class="row" >
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fecha inicio y fin confirmada</mat-label>
+                            <mat-date-range-input [rangePicker]="pickerR">
+                                <input matStartDate placeholder="Fecha inicio" id="fiConfirmada"
+                                    [formControl]="fxInicioDisponibilidad">
+                                <input matEndDate placeholder="Fecha fin" id="ffConfirmada"
+                                    [formControl]="fxFinDisponibilidad">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="pickerR"></mat-datepicker-toggle>
+                            <mat-date-range-picker #pickerR></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Clínica EMO</mat-label>
+                            <mat-select [formControl]="fkClinicaEMO">
+                                <mat-option *ngFor="let md of clinicas" [value]="md.idMaestroDetalle">
+                                    {{md.stNombre}}
+                                </mat-option>
+                            </mat-select>
+
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row" >
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fecha cita EMO</mat-label>
+                            <input matInput [matDatepicker]="picker" [formControl]="fxSolicitudEMO">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hora cita</mat-label>
+                            <input matInput [formControl]="horaSolicitudEMO">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </fieldset>
+            <fieldset class="form-group  p-3">
+                <legend class="w-auto px-2">PERFIL REQUERIMIENTO</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Categoria</mat-label>
+                                    <mat-select formControlName="fkMdPerfilContratacion"
+                                        (selectionChange)="onRolChange($event)">
+                                        <mat-option *ngFor="let md of rol" [value]="md.idMaestroDetalle">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="formulario.controls['fkMdPerfilContratacion'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Puesto</mat-label>
+                                    <mat-select formControlName="fkMdPerfilFuncion"
+                                        (selectionChange)="onFuncionChange($event)">
+                                        <mat-option *ngFor="let md of funcion" [value]="md.idMaestroDetalle">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdPerfilFuncion'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                           </div>
+                           <div class="col-md-1 text-align" *ngIf="showpercrearfilpuesto">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-xs" (click)="openPopupnewpuestoperfil()"  style="width:35px; padding-left: 10px;" >
+                              <mat-icon style="width:10px;  ;">add_circle_outline</mat-icon>
+                            </a>
+                        </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Experiencia y otros conocimientos</mat-label>
+                                    <textarea matInput formControlName="stOtros"></textarea>
+                                    <mat-error *ngIf="formulario.controls['stOtros'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf=" formulario.get('stOtros').hasError('maxlength')">
+                                        Este campo debe contener 50 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Especificaciones del puesto</mat-label>
+                                    <mat-select formControlName="fkMdPerfilValido">
+                                        <mat-option *ngFor="let md of perfilValido" [value]="md.idMaestroDetalle">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdPerfilValido'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre del cliente</mat-label>
+                                    <input matInput type="text" formControlName="stNombreCliente">
+                                    <mat-error *ngIf="formulario.controls['stNombreCliente'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf="formulario.get('stNombreCliente').hasError('minlength')">
+                                        Este campo debe contener 3 caracteres como minimo
+                                    </mat-error>
+                                    <mat-error *ngIf=" formulario.get('stNombreCliente').hasError('maxlength')">
+                                        Este campo debe contener 100 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre del Servicio</mat-label>
+                                    <input matInput type="text" formControlName="stNombreServicio">
+                                    <mat-error *ngIf="formulario.controls['stNombreServicio'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-error *ngIf="formulario.get('stNombreServicio').hasError('minlength')">
+                                    Este campo debe contener 3 caracteres como minimo
+                                </mat-error>
+                                <mat-error *ngIf=" formulario.get('stNombreServicio').hasError('maxlength')">
+                                    Este campo debe contener 100 caracteres como máximo
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Objetivo del puesto</mat-label>
+                                    <textarea matInput placeholder="Objetivo del puesto"
+                                        formControlName="stDescripcionDetallada"></textarea>
+                                    <mat-error
+                                        *ngIf="formulario.controls['stDescripcionDetallada'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf="formulario.get('stDescripcionDetallada').hasError('minlength')">
+                                        Este campo debe contener 3 caracteres como minimo
+                                    </mat-error>
+                                    <mat-error *ngIf=" formulario.get('stDescripcionDetallada').hasError('maxlength')">
+                                        Este campo debe contener 1000 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Fecha inicio del servicio</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="fxInicioLabor">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <mat-error *ngIf="formulario.controls['fxInicioLabor'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Fecha fin del servicio</mat-label>
+                                    <input matInput [matDatepicker]="picker2" formControlName="fxFinLabor">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group  p-3">
+                <legend class="w-auto px-2">INFORMACIÓN ADICIONAL</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tiempo de contrato</mat-label>
+                                    <input matInput type="number" formControlName="TiempoContrato">
+                                    <span matPrefix>&nbsp;&nbsp;</span>
+                                    <span matSuffix>meses</span>
+                                    <mat-error *ngIf="formulario.controls['TiempoContrato'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-7">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Sustento sobre el tiempo de contrato</mat-label>
+                                    <input matInput type="text" formControlName="stSustentoTiempoContrato">
+                                    <mat-error
+                                        *ngIf="formulario.controls['stSustentoTiempoContrato'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                    <mat-error *ngIf="formulario.get('stSustentoTiempoContrato').hasError('minlength')">
+                                        Este campo debe contener 3 caracteres como minimo
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf=" formulario.get('stSustentoTiempoContrato').hasError('maxlength')">
+                                        Este campo debe contener 100 caracteres como máximo
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Horario</mat-label>
+                                    <mat-select formControlName="idHorario">
+                                        <mat-option *ngFor="let md of horarios" [value]="md.id">{{md.descripcion }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['idHorario'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field color="primary" appearance="outline">
+                                    <mat-label>Fecha Tentativa de incorporación</mat-label>
+                                    <input matInput [matDatepicker]="pickerTenta"
+                                        formControlName="fxFechaTentativaIncorporacion">
+                                    <mat-datepicker-toggle matSuffix [for]="pickerTenta"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerTenta color="primary"></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Modalidad</mat-label>
+                                    <mat-select formControlName="fkMdArqueTipo">
+                                        <mat-option *ngFor="let md of arquetipo" [value]="md.idMaestroDetalle">
+                                            {{md.stNombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls['fkMdArqueTipo'].hasError('required')">
+                                        Este campo es obligatorio
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-4">Asignaciones Adicionales:</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6" *ngFor="let group of groups">
+                                        <ul style=" list-style-type: none;">
+                                            <li *ngFor="let item of group" formArrayName="IdsAsignacionesAdicionales">
+
+                                                <mat-checkbox color="primary" [disabled]="item.disabled"
+                                                    [checked]="item.completed"
+                                                    (change)="updateChkbxArray(item, $event.checked, 'IdsAsignacionesAdicionales')"
+                                                    value="item.inCodigo">
+                                                    {{item.stNombre}}
+                                                </mat-checkbox>
+                                            </li>
+                                        </ul>
+
+                                        <!--<mat-checkbox color="primary" [checked]="item.completed"
+                                            (change)="updateChkbxArray(item, $event.checked, 'IdsAsignacionesAdicionales')"
+                                            value="item.inCodigo">
+                                            {{item.stNombre}}
+                                        </mat-checkbox>-->
+                                    </div>
+                                    <mat-error *ngIf="formulario.controls.IdsAsignacionesAdicionales.invalid">
+                                        Por favor seleccione al menos una asignación adicional
+                                    </mat-error>
+                                </div>
+                                <!--
+                                <ul style=" list-style-type: none;">
+                                    <li *ngFor="let item of asignacionesAdicionalesAlTalento; let i = index"
+                                        formArrayName="IdsAsignacionesAdicionales">
+                                        {{i}}
+                                        <mat-checkbox color="primary" [checked]="item.completed"
+                                            (change)="updateChkbxArray(item, $event.checked, 'IdsAsignacionesAdicionales')"
+                                            value="item.inCodigo">
+                                            {{item.stNombre}}
+                                        </mat-checkbox>
+                                    </li>
+                                </ul>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </mat-drawer-content>
+    </mat-drawer-container>
+
+    <div id="modalComentarios" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nuevo Comentario</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <textarea class="form-control" rows="5" id="stComentario" name="stComentario"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarComentario" (click)="guardarComentario()"
+                        class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-danger" (click)="closePopup()">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

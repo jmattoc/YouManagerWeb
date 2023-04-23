@@ -1,0 +1,96 @@
+<h4 mat-dialog-title class="dialog-headline">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form autocomplete="on" [formGroup]="formulario" class="form-horizontal w-100 p-md-4 p-4">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+          <mat-tab label="BUSCAR Y HABILITAR USUARIO">
+            <div class="row">
+              <div class="col-md-11">
+                <fieldset class="form-group p-3">
+                  <legend class="80% px-2">DATOS DE USUARIO</legend>
+                  <div class="row">
+                    <div class="col-md-6">
+                    <!--  <mat-form-field appearance="outline">
+                         <mat-label>Buscar login</mat-label>
+                          <input type="text" matInput [formControl]="myControlSolicitante" class="input-sm"                            formControlName="myControlSolicitante"  required style="text-transform: uppercase;" [(ngModel)]="loginusertxt">
+                           <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="searchloginuser()">
+                            <mat-icon>search</mat-icon>
+                           </button>
+                           <mat-error *ngIf="formulario.get('myControlSolicitante')?.hasError('required')">
+                            Es necesario completar el login!
+                           </mat-error>
+                      </mat-form-field>-->
+                      <mat-form-field appearance="outline">
+                        <mat-label>Buscar</mat-label>
+                        <input type="text" matInput [formControl]="myControlSolicitante" class="input-sm" (ngModelChange)="chanetrabajador($event)"
+                            formControlName="myControlSolicitante" [matAutocomplete]="solicitante" required style="text-transform: uppercase;">
+                        <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="searchloginuser()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <mat-autocomplete panelWidth="300px" #solicitante="matAutocomplete" autoActiveFirstOption
+                            [displayWith]="displayFnSolicitante" >
+                            <mat-option *ngIf="isLoading" class="autocomplete__option--loading">
+                                <mat-spinner diameter="20"></mat-spinner>
+                            </mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let option of listarlogin" [value]="option" >
+                                    {{option.NombreCompleto}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="formulario.get('myControlSolicitante')?.hasError('required')">
+                            Es necesario el campo!
+                        </mat-error>
+                    </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                       <h3 style="color: darkslateblue;">{{_mensajerpta}}</h3>
+                    </div>
+                  </div>
+                  <div class="row tm-3">
+                    <div class="col-md-12">
+                      <div class="alert alert-success text-center" role="alert" *gnIf="showalerttrue">
+                        A simple primary alert—check it out!
+                      </div>
+                      <div class="alert alert-danger text-center" role="alert" *gnIf="!showalerttrue">
+                        A simple primary alert—check it out!
+                      </div>
+                    </div>
+                     </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" *ngIf="showlistarperfil">
+                        <mat-label>Perfil</mat-label>
+                            <mat-select formControlName="stmaneperfil2" [(ngModel)]="Idperfilint2" (selectionChange)="chaneperfil($event)">
+                              <mat-option *ngFor="let estado of listarperfilapp" [value]="estado.Id">
+                                {{estado.Nombre}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formulario.get('stmaneperfil2')?.hasError('required')">
+                              Seleccione el perfil!
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+export interface trProveedorPostulante{
+    idPostulante:number;
+    fkSolicitud?:number;
+    fkProveedor?:number;
+    stNombre?:string;
+    stGradoInstruccion?:string;
+    inEdad?:number;
+    fkMdDisponibilidad?:number;
+    urlFoto?:string;
+    urlCv?:string;
+    stDisponibilidad?:string;
+    stEstado?:string;
+    linkPerfil?:string;
+    permiteAprobar?:boolean;
+    fxFechaEntrevista?:Date;
+    stLugarEntrevista:string;
+    stTipoEntrevista:string;
+    flPresupuestoMensual?:number;
+    stNroDocumento:string;
+}

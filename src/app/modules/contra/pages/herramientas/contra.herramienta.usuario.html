@@ -1,0 +1,57 @@
+<div class="container">
+
+
+    <h2>Usuario</h2>
+
+    <form  >
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="stNombres">Nombres</label>
+                <input type="text" class="form-control" id="stNombres" name="stNombres" placeholder="">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="stApellidos">Apellidos</label>
+                <input type="text" class="form-control" id="stApellidos" name="stApellidos" placeholder="">
+            </div>
+        </div>
+
+        <div class="form-row">            
+            <div class="form-group col-md-4">
+                <label for="stCorreo">Correo</label>
+                <input type="email" class="form-control" id="stCorreo" name="stCorreo" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="stUsuario">Usuario</label>
+                <input type="text" class="form-control" id="stUsuario" name="stUsuario" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="stPassword">Password</label>
+                <input type="password" class="form-control" id="stPassword" name="stPassword" placeholder="">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="cmbRol">Rol</label>
+                <select id="cmbRol" name="cmbRol" class="form-control">                
+                    <option value="1">SOLICITANTE</option>
+                    <option value="2">PROVEEDOR</option>
+                    <option value="3">ADMIN</option>
+                    <option value="4">LOGISTICA</option>
+                    <option value="5">GDH</option>
+                    <option value="6">PROVEEDOR</option>
+                    <option value="7">CONTROL_GASTO</option>
+                    
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="cmbProveedor">Proveedor</label>
+                <select id="cmbProveedor"  name="cmbProveedor"  class="form-control">
+                    <option value="0" selected>Choose...</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="button" id="btnGuardar" (click)="guardar()" class="btn btn-primary">Guardar</button>
+        
+    </form>
+</div>

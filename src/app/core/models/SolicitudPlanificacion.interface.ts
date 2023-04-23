@@ -1,0 +1,59 @@
+export interface SolicitudListadoPlanificacion {
+   
+    idSolicitud:number;
+    stCodigoP:string;
+    stNombre:string;
+    idProveedor:number;
+    solicitante:string;
+    sistema:string;
+    idSistema:number;
+    tipodeSolicitud:string;
+    idTipodeSolicitud:number;
+    email:string;
+    modulo:string;
+    idModulo:number;
+    categoria:string;
+    idCategoria:number;
+    prioridad:string; 
+    idPrioridad:number;
+    descripcion:string;
+    adjuntos:string;
+    estado:string;
+    idEstado:number;
+    FechaRegistroSolicitud:Date;
+    lblPendiente:boolean;
+    FechaRegistroPendiente:Date;
+    IdUsuarioPendiente:number
+}
+
+export interface ListarSolicitudResponsePla{
+    pages:number;
+    current_page:number;
+    totalElements:number;
+    records:[ListarSolicitudDtoPla];
+}
+export interface ListarSolicitudDtoPla{
+    idSolicitud:number;
+    stCodigoP:string;
+    stNombre:string;
+    idProveedor:number;
+    sistema:string;
+    idSistema:number;
+    tipodeSolicitud:string;
+    idTipodeSolicitud:number;
+    email:string;
+    modulo:string;
+    idModulo:number;
+    categoria:string;
+    idCategoria:number;
+    prioridad:string; 
+    idPrioridad:number;
+    descripcion:string;
+    adjuntos:string;
+    estado:string;
+    idEstado:boolean;
+    FechaRegistroSolicitud:Date;
+    lblPendiente:boolean;
+    FechaRegistroPendiente:Date;
+    IdUsuarioPendiente:number
+}

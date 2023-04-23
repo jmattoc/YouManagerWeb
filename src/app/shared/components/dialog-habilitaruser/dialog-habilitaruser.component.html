@@ -1,0 +1,268 @@
+<h4 mat-dialog-title class="dialog-headline">
+    <mat-toolbar role="toolbar" class="dialog-header">
+      <span> {{data.titulo}}</span>
+      <span class="fx-spacer"></span>
+      <button mat-icon-button (click)="cerrarDialogo()">
+        <mat-icon mat-list-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+  </h4>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+        <form autocomplete="on" [formGroup]="formulario" class="form-horizontal w-100 p-md-4 p-4">
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1" [checked]="checkedradio"  (change)="radioChane($event)" >&nbsp;&nbsp;Usuario existente&nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+                <mat-radio-button value="2" (change)="radioChane($event)">&nbsp;&nbsp;Nuevo usuario&nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="row" *ngIf="showhabilitar">
+              <div class="col-md-12">
+                <fieldset class="form-group p-3">
+                  <legend class="80% px-2">DATOS</legend>
+                  <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                     <span style="text-transform: uppercase; color:#156185 ; font-weight: 600; font-size:25px;"> {{nombrecompleto}}</span>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                    <div class="col-md-10">
+                    <!--  <mat-form-field appearance="outline">
+                         <mat-label>Buscar login</mat-label>
+                          <input type="text" matInput [formControl]="myControlSolicitante" class="input-sm"                            formControlName="myControlSolicitante"  required style="text-transform: uppercase;" [(ngModel)]="loginusertxt">
+                           <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="searchloginuser()">
+                            <mat-icon>search</mat-icon>
+                           </button>
+                           <mat-error *ngIf="formulario.get('myControlSolicitante')?.hasError('required')">
+                            Es necesario completar el login!
+                           </mat-error>
+                      </mat-form-field> -->
+                      <mat-form-field appearance="outline">
+                        <mat-label>Buscar</mat-label>
+                        <input type="text"  matInput [formControl]="myControlSolicitante" id="idsValue" class="input-sm" (ngModelChange)="chanetrabajador($event)"
+                            formControlName="myControlSolicitante" [matAutocomplete]="solicitante" style="text-transform: uppercase;">
+                        <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="searchloginuser()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <mat-autocomplete panelWidth="400px" #solicitante="matAutocomplete" autoActiveFirstOption
+                            [displayWith]="displayFnSolicitante" >
+                            <mat-option *ngIf="isLoading" class="autocomplete__option--loading">
+                                <mat-spinner diameter="20"></mat-spinner>
+                            </mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let option of listarlogin" [value]="option" >
+                                    {{option.NombreCompleto}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-12 text-center" *ngIf="showmsgrpta">
+                     <span style="text-transform: uppercase; color:#156185 ; font-weight: 500; font-size:15px;"> {{_mensajerpta}}</span>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <!--  <mat-form-field appearance="outline" *ngIf="showlistarperfil">
+                           <mat-label>Perfil</mat-label>
+                            <mat-select formControlName="stmaneperfil2" [(ngModel)]="Idperfilint2" (selectionChange)="chaneperfil2($event)">
+                              <mat-option *ngFor="let estado of listarperfilapp" [value]="estado.Id">
+                                {{estado.Nombre}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formulario.get('stmaneperfil2')?.hasError('required')">
+                              Seleccione el perfil!
+                            </mat-error>
+                        </mat-form-field> -->
+                        <mat-form-field appearance="outline" *ngIf="showlistarperfil">
+                          <mat-label>Seleccione Perfil</mat-label>
+                          <mat-select [formControl]="toppings2" multiple (selectionChange)="chaneperfil2($event)" >
+                            <mat-select-trigger>
+                              {{toppings2.value?.[0] || ''}}
+                              <span *ngIf="(toppings2.value?.length || 0) > 1" class="example-additional-selection">
+                                (+{{(toppings2.value?.length || 0) - 1}} {{toppings2.value?.length === 2 ? 'otro' : 'otros'}})
+                              </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let topping2 of listarperfilapp" [value]="topping2.Id">{{topping2.Nombre}}</mat-option>
+                          </mat-select>
+                          <mat-icon matPrefix class="my-icon">control_camera</mat-icon>
+                        </mat-form-field>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12" *ngIf="showbtnhabilitaruser" >
+                      <button mat-raised-button class="btn btn-primary float:left" (click)="btnhabiltiaruser()" style="float:right;">
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row" *ngIf="showcrearuser">
+              <div class="col-md-12">
+                <fieldset class="form-group p-3">
+                  <legend class="80% px-2">DATOS</legend>
+                <!--  <div class="row">
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Nombres</mat-label>
+                        <input matInput [(ngModel)]="nombreusertxt"
+                        formControlName="stamanenombreuser" [formControl]="stamanenombreuser" required>
+                        <mat-error *ngIf="formulario.get('stamanenombreuser')?.hasError('required')">
+                          Seleccione nombre!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Apelldio Paterno</mat-label>
+                        <input matInput [(ngModel)]="ApellPaternotxt"
+                        formControlName="stamaneappaternouser" [formControl]="stamaneappaternouser" required>
+                        <mat-error *ngIf="formulario.get('stamaneappaternouser')?.hasError('required')">
+                          Seleccione apellido paterno!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Apellido Materno</mat-label>
+                        <input matInput [(ngModel)]="ApellMaternotxt"
+                        formControlName="stamaneaapmaternouser" [formControl]="stamaneaapmaternouser" required>
+                        <mat-error *ngIf="formulario.get('stamaneaapmaternouser')?.hasError('required')">
+                          Seleccione apellido materno!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                      <mat-label>Perfil</mat-label>
+                          <mat-select formControlName="stmaneperfil" [(ngModel)]="Idperfilint" (selectionChange)="chaneperfil($event)">
+                            <mat-option *ngFor="let estado of listarperfilapp" [value]="estado.Id">
+                              {{estado.Nombre}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="formulario.get('stmaneperfil')?.hasError('required')">
+                            Seleccione el perfil!
+                          </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Login</mat-label>
+                        <input matInput [(ngModel)]="logintxt"
+                        formControlName="stamalogin" [formControl]="stamalogin" required>
+                        <mat-error *ngIf="formulario.get('stamalogin')?.hasError('required')">
+                          Ingrese el login!
+                        </mat-error>
+                      </mat-form-field>
+
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="emailtxt"
+                        formControlName="stamaemail" [formControl]="stamaemail" required>
+                        <mat-error *ngIf="formulario.get('stamaemail')?.hasError('required')">
+                          Ingrese email!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button mat-raised-button class="btn btn-primary float:left" (click)="CrearPerfil()">
+                        guardar
+                      </button>
+                    </div>
+                  </div> -->
+                 <div class="row mt-3">
+                   <div class="col-md-12 text-center">
+                    <span style="text-transform: uppercase; color:#156185 ; font-weight: 600; font-size:25px;"> {{nombrecompleto}}</span>
+                   </div>
+                 </div>
+                 <hr/>
+                 <div class="row mt-3">
+                    <div class="col-md-4">
+                       <!--  <mat-form-field appearance="outline">
+                           <mat-label>Perfil</mat-label>
+                          <mat-select formControlName="stmaneperfil2" [(ngModel)]="Idperfilint" (selectionChange)="chaneperfil($event)">
+                            <mat-option *ngFor="let estado of listarperfilapp" [value]="estado.Id">
+                              {{estado.Nombre}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="formulario.get('stmaneperfil')?.hasError('required')">
+                            Seleccione el perfil!
+                          </mat-error>
+                        </mat-form-field>-->
+                        <mat-form-field appearance="outline">
+                          <mat-label>Seleccione Perfil</mat-label>
+                          <mat-select [formControl]="toppings" multiple (selectionChange)="chaneperfil($event)">
+                            <mat-select-trigger>
+                              {{toppings.value?.[0] || ''}}
+                              <span *ngIf="(toppings.value?.length || 0) > 1" class="example-additional-selection">
+                                (+{{(toppings.value?.length || 0) - 1}} {{toppings.value?.length === 2 ? 'otro' : 'otros'}})
+                              </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let topping of listarperfilapp" [value]="topping.Id">{{topping.Nombre}}</mat-option>
+                          </mat-select>
+                          <mat-icon matPrefix class="my-icon">control_camera</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Login</mat-label>
+                        <input matInput [(ngModel)]="logintxt"
+                        formControlName="stamalogin" [formControl]="stamalogin">
+                        <mat-icon matPrefix class="my-icon">supervisor_account</mat-icon>
+                        <mat-error *ngIf="formulario.get('stamalogin')?.hasError('required')">
+                          Ingrese el login!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" [(ngModel)]="emailtxt"
+                        formControlName="stamaemail" [formControl]="stamaemail">
+                        <mat-icon matPrefix class="my-icon">email</mat-icon>
+                        <mat-error *ngIf="formulario.get('stamaemail')?.hasError('required')">
+                          Ingrese email o valide el formato correcto!
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                 </div>
+                 <div class="row mt-3">
+
+                 </div>
+                 <div class="row">
+                  <div class="col-md-12" >
+                    <button mat-raised-button class="btn btn-primary float:left" (click)="CrearPerfil()" style="float:right;">
+                      Guardar
+                    </button>
+                  </div>
+                </div>
+                </fieldset>
+              </div>
+            </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+

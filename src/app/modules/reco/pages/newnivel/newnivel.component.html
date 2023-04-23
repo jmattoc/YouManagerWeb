@@ -1,0 +1,126 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">mobile_friendly</i></div>
+                 <h4 class="card-title">
+                  {{titulo}}
+                </h4>
+               </div>
+             </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="true">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          {{ subtitulo }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <form autocomplete="on" [formGroup]="formularionewcategoria" *ngIf="showregiscateg" class="form-horizontal w-100 p-md-4 p-4" (ngSubmit)="guardarnivel()">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <button mat-raised-button class="btn btn-info"  routerLink="/configuracion/niveles">
+                                <mat-icon>block</mat-icon>
+                                Cancelar
+                              </button>
+                              <button mat-raised-button class="btn btn-primary">
+                                {{btnguar}}
+                              </button>
+                            </div>
+                          </div>
+                          <fieldset class="form-group p-3">
+                            <legend class="w-auto px-2">DATOS GENERALES</legend>
+                            <div class="row mt-3">
+                              <div class="col-md-10">
+                                <h1 style="color:mediumblue; font-zise:20px !important;font-weight: 500; margin-left: 10px;">{{ periodotxt }}</h1>
+                             </div>
+                            </div>
+                              <div class="row mt-3">
+                              <div class="col-md-2">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Nivel</mat-label>
+                                <mat-select formControlName="stmanenivel"  required [(ngModel)]="niveltxt" (selectionChange)="chanenivel($event)">
+                                  <mat-option *ngFor="let nivel of listartiponivel" [value]="nivel.value" >
+                                    {{nivel.viewValue}}
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formularionewcategoria.get('stmanenivel')?.hasError('required')">
+                                  Seleccione el tipo de nivel!
+                                </mat-error>
+                              </mat-form-field>
+                              </div>
+                              <div class="col-md-8" *ngIf="shownivelsuper">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Selecione nivel superior</mat-label>
+                                  <mat-select formControlName="stmanenivelsuperior"  required [(ngModel)]="nivelinferiortxt" (selectionChange)="chanenivelsuper($event)">
+                                    <mat-option *ngFor="let infe of lstnivelinferior" [value]="infe.id" >
+                                      {{infe.nombre}}
+                                    </mat-option>
+                                  </mat-select>
+                                 <!-- <mat-error *ngIf="formularionewcategoria.get('stmanenivelsuperior')?.hasError('required')">
+                                    Seleccione el nivel superior!
+                                  </mat-error> -->
+                                </mat-form-field>
+                              </div>
+                              </div>
+                              <div class="row mt-3">
+                               <div class="col-md-5">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Nombre de nivel</mat-label>
+                                <input matInput [(ngModel)]="newnombreniveltxt"
+                                formControlName="stamaemonbrenivel" [formControl]="stamaemonbrenivel" required>
+                                <mat-error *ngIf="formularionewcategoria.get('stamaemonbrenivel')?.hasError('required')">
+                                  Es necesario completar el nombre del nivel!
+                                </mat-error>
+                              </mat-form-field>
+                               </div>
+                              </div>
+                              <div class="row mt-3">
+                            <div class="col-md-5">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Responsable</mat-label>
+                                <input matInput [(ngModel)]="neworesponsabletxt"
+                                formControlName="stamaneresponsable" [formControl]="stamaneresponsable" required>
+                                <mat-error *ngIf="formularionewcategoria.get('stamaneresponsable')?.hasError('required')">
+                                  Es necesario completar el responsable!
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-5">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Cargo</mat-label>
+                                <input matInput [(ngModel)]="newcargotxt"
+                                formControlName="stamanecargo" [formControl]="stamanecargo" required>
+                                <mat-error *ngIf="formularionewcategoria.get('stamanecargo')?.hasError('required')">
+                                  Es necesario completar el cargo!
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                              </div>
+                            </fieldset>
+                      </form>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

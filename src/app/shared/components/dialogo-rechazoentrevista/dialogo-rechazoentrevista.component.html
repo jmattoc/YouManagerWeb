@@ -1,0 +1,42 @@
+<h4 mat-dialog-title class="dialog-headline">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+  <br>
+  <div class="container-fluid">
+    <form [formGroup]="datosBasicosFormGroup" class="form-horizontal" (ngSubmit)='confirmado()'>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Motivo de Rechazo</mat-label>
+            <textarea required formControlName="mytxtComentario" matInput [maxlength]="200"
+              placeholder="Motivo de Rechazo" rows="3"></textarea>
+            <mat-error *ngIf="datosBasicosFormGroup.get('mytxtComentario')?.hasError('required')">
+              Es necesario el motivo de rechazo!
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <button mat-raised-button class="btn btn-primary">
+            <mat-icon>check</mat-icon>
+            Guardar
+          </button>
+          <button mat-raised-button class="btn btn-info" (click)="cerrarDialogo()">
+            <mat-icon>block</mat-icon>
+            Cancelar
+          </button>
+        </div>
+      </div>
+      <br>
+    </form>
+  </div>
+</div>

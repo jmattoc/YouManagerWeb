@@ -1,0 +1,196 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">person_add</i></div>
+                 <h4 class="card-title">COLABORADORES</h4>
+               </div>
+               <div class="col-md-3">
+                <h2 class="card-title">{{ codsolicitud }}</h2>
+             </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-accordion class="example-headers-align" multi>
+                  <mat-expansion-panel [expanded]="matexpansionpanelfiltro">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Filtro Búsqueda
+                      </mat-panel-title>
+                      <mat-panel-description>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <form autocomplete="on" [formGroup]="formulario" *ngIf="formulario">
+                      <fieldset class="form-group p-3">
+                        <legend class="w-auto px-2">OPCIONES DE BUSQUEDA</legend>
+                        <div class="row mt-3">
+                          <div class="col-md-2">
+                           <mat-form-field appearance="outline">
+                             <mat-label>CIP</mat-label>
+                             <input matInput [(ngModel)]="CIPtxt"
+                             formControlName="stamanecip" [formControl]="stamanecip">
+                           </mat-form-field>
+                          </div>
+                         <div class="col-md-6">
+                           <mat-form-field appearance="outline">
+                             <mat-label>Apellidos o nombres</mat-label>
+                             <input matInput [(ngModel)]="apellinombrestxt"
+                             formControlName="stamaneapellinombres" [formControl]="stamaneapellinombres" style="text-align: left; text-transform: uppercase;">
+                           </mat-form-field>
+                         </div>
+                         <div class="col-md-2">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Dni</mat-label>
+                            <input matInput [(ngModel)]="nroDni"
+                            formControlName="stamanedni" [formControl]="stamanedni">
+                          </mat-form-field>
+                         </div>
+                         <div class="col-md-2">
+                          <button mat-raised-button class="btn btn-primary float-lef"  (click)="searchperfil(1,10)">
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                          </button>
+                         </div>
+                        </div>
+                      </fieldset>
+                    </form>
+                  </mat-expansion-panel>
+                  <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+
+                      </mat-panel-title>
+                      <mat-panel-description>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <fieldset class="form-group p-3">
+                      <legend class="w-auto px-2">RESULTADO</legend>
+
+                          <div class="row mt-3">
+                             <div class="col-md-12">
+                          <!-- <button mat-raised-button class="btn float-right"       routerLink="/contrato/nuevo">
+                            Nuevo Puesto
+                            </button>-->
+
+                           </div>
+                          </div>
+
+                          <div class="table-container" style="font-size: 8px;" *ngIf="listartrabajadoresv2 !=null">
+                            <table mat-table [dataSource]="listartrabajadoresv2.data" >
+                              <ng-container matColumnDef="stmenu">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Menu </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">
+                                  <mat-menu #appMenu="matMenu">
+                                    <div *ngIf="element.mostrarCrearUsuario">
+                                      <button (click)="CrearUser(element.id, element.nombre)" style="font-size: 12px;" mat-menu-item >
+                                        <mat-icon style="font-size: 15px; margin:5px 0 0 0;">supervisor_account</mat-icon>Habilitar Usuario
+                                      </button>
+                                    </div>
+                                    <!--  <button (click)="HabilitarUser(element.id, element.nombre, element.login
+                                      )" style="font-size: 12px;" mat-menu-item >
+                                         <mat-icon style="font-size: 15px; margin:5px 0 0 0;">accessibility_new</mat-icon> Habilitar Usuario
+                                       </button> -->
+
+                                  </mat-menu>
+                                  <a style="cursor:pointer;color: #979797;" mat-icon-button
+                                  [matMenuTriggerFor]="appMenu">
+                                  <mat-icon>more_vert</mat-icon>
+                                </a>
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stsolicitud">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-90"> solicitud </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-90" style="text-align: left; text-transform: uppercase;">
+                                  <div *ngIf="element.idSolicitud !=null">
+                                    <button (click)="verSolicitud(element.idSolicitud)" style="font-size: 12px;" mat-menu-item title="Ver Solicitud">
+                                      <mat-icon style="font-size: 25px; margin:5px 0 0 0;color: #156185 !important;">description</mat-icon>
+                                    </button>
+                                  </div>
+                                  <div *ngIf="element.idSolicitud == null">
+                                    <button style="font-size: 12px;" mat-menu-item title="No registra solicitud">
+                                      <mat-icon style="font-size: 25px; margin:5px 0 0 0;">description</mat-icon>
+                                    </button>
+                                  </div>
+
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stcodigo">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Codigó </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.codigo}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stnombre">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Nombre </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.nombre}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stnroDocumento">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Documento de Identidad </th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.nroDocumento}}
+                                </td>
+                              </ng-container>
+                             <!-- <ng-container matColumnDef="stfxInicioLabor">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Fecha de Inicio</th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.fxInicioLabor | date:'dd/MM/yyyy'}}
+                                </td>
+                              </ng-container>-->
+                              <ng-container matColumnDef="stpersonaLider">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Jefe Inmediato</th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.personaLider}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="stcorreoCorporativo">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Correo</th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.correoCorporativo}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="sttelefonoCorporativo">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Celular</th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.telefonoCorporativo}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="login">
+                                <th mat-header-cell *matHeaderCellDef class="table-column-150">Usuario</th>
+                                <td mat-cell *matCellDef="let element" class="table-column-150" style="text-align: left; text-transform: uppercase;">{{element.login}}
+                                </td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                              <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+                              <tr class="mat-row no-data-row" *matNoDataRow>
+                              <td class="mat-cell" colspan="7">No se encontraron registro.</td>
+                              </tr>
+                            </table>
+                            <div *ngIf="isLoading" class="spinner-container">
+                                <mat-progress-spinner [diameter]="50" color="primary"
+                                  mode="indeterminate">
+                                </mat-progress-spinner>
+                            </div>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 100]" [pageSize]="listartrabajadoresv2.pageSize" howFirstLastButtons [length]="listartrabajadoresv2.totalRecords" (page)="onPaginateChange($event)">
+                            </mat-paginator>
+                          </div>
+
+
+
+                    </fieldset>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<form autocomplete="on" [formGroup]="formulario" (ngSubmit)="guardar()" *ngIf="formulario">
+  <div class="row">
+    <div class="col-md-12">
+        <button mat-raised-button class="btn">Guardar<mat-icon>save</mat-icon></button>
+        <a class="btn btn-info" mat-raised-button [routerLink]="['/seguridad/bandroles']">Cancelar<mat-icon>block</mat-icon></a>
+    </div>
+  </div>
+  <fieldset class="form-group border p-3">        
+      <div class="row">
+          <div class="col-md-5">
+              <mat-form-field appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre">
+                  <mat-error *ngIf="formulario.controls['nombre'].hasError('required')">
+                      Este campo es obligatorio
+                  </mat-error>
+                  <mat-error *ngIf="formulario.controls['nombre'].hasError('minlength')">
+                    Este campo debe contener 3 caracteres como mínimo
+                  </mat-error>                  
+                  <mat-error *ngIf="formulario.controls['nombre'].hasError('maxlength')">
+                    Este campo debe contener 50 caracteres como máximo
+                  </mat-error>
+              </mat-form-field>
+          </div>
+          <div class="col-md-5">
+              <mat-form-field appearance="outline">
+                  <mat-label>Descripción</mat-label>
+                  <input matInput formControlName="descripcion">
+                  <mat-error *ngIf="formulario.controls['descripcion'].hasError('required')">
+                      Este campo es obligatorio
+                  </mat-error> 
+                  <mat-error *ngIf="formulario.controls['descripcion'].hasError('minlength')">
+                    Este campo debe contener 3 caracteres como mínimo
+                  </mat-error>                  
+                  <mat-error *ngIf="formulario.controls['descripcion'].hasError('maxlength')">
+                    Este campo debe contener 50 caracteres como máximo
+                  </mat-error>
+              </mat-form-field>
+          </div> 
+          <div class="col-md-2">
+            <mat-form-field appearance="outline">
+                <mat-label>Peso</mat-label>
+                <input matInput type="number" formControlName="Peso">
+                <mat-error *ngIf="formulario.controls['Peso'].hasError('required')">
+                    Este campo es obligatorio
+                </mat-error>                
+            </mat-form-field>
+        </div>
+      </div>
+  </fieldset>
+</form>
+<fieldset class="form-group border p-3">
+  <legend class="w-auto px-2">OPCIONES Y BOTONES DEL SISTEMA</legend>
+    <div class="row">
+    <div class="col-md-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Version app</mat-label>
+        <mat-select [(value)]="versionDefault" 
+          (selectionChange)="onVersionChange($event)">
+          <mat-option *ngFor="let ver of versiones" [value]="ver.Version">
+            {{ver.Nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-12">                        
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+            <button mat-icon-button disabled></button>
+            <mat-checkbox class="checklist-leaf-node"
+                          [checked]="checklistSelection.isSelected(node)"
+                          (change)="todoLeafItemSelectionToggle(node)">{{node.title}}</mat-checkbox>
+
+             <button mat-icon-button (click)="addNewItem(node)" ><mat-icon>add</mat-icon></button>
+             
+          </mat-tree-node>
+        
+          <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+            <button mat-icon-button disabled></button>
+            <mat-form-field appearance="fill">
+              <mat-label>Crear Elemento...</mat-label>
+              <input matInput #itemValue placeholder="Ex. Lettuce">
+            </mat-form-field>
+            <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
+          </mat-tree-node>
+        
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+            <button mat-icon-button matTreeNodeToggle
+                    [attr.aria-label]="'Toggle ' + node.title">
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+            </button>
+            <mat-checkbox [checked]="descendantsAllSelected(node)"
+                          [indeterminate]="descendantsPartiallySelected(node)"
+                          (change)="todoItemSelectionToggle(node)">{{node.title}}</mat-checkbox>
+            <button mat-icon-button (click)="addNewItem(node)" ><mat-icon>add</mat-icon></button>
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+  </div>
+</fieldset>

@@ -1,0 +1,22 @@
+<div class="wrapper">
+
+<!--https://thumbs.dreamstime.com/b/tiempo-de-reuni%C3%B3n-la-mujer-negocios-gerentes-contables-que-trabajan-con-un-nuevo-proyecto-inicio-uso-calculadora-y-laptop-en-163861278.jpg
+https://thumbs.dreamstime.com/z/gente-de-negocios-trabajando-en-calculadoras-y-gr%C3%A1ficos-analistas-mercado-financiero-la-oficina-con-laptops-sentadas-w-244957784.jpg
+https://thumbs.dreamstime.com/z/negocio-vertical-de-hombres-negocios-que-se-re%C3%BAnen-y-tienen-una-discusi%C3%B3n-an%C3%A1lisis-grafo-financiero-j%C3%B3venes-colegas-trabajan-243104790.jpg
+https://st.depositphotos.com/39672126/55198/i/450/depositphotos_551981740-stock-photo-vertical-business-businessmen-meeting-having.jpg
+https://st2.depositphotos.com/39672126/48340/i/450/depositphotos_483408216-stock-photo-portrait-asian-male-financial-officer.jpg
+-->
+
+    <div class="sidebar" data-color="white" data-background-color="red" data-image="https://st2.depositphotos.com/39672126/48340/i/450/depositphotos_483408216-stock-photo-portrait-asian-male-financial-officer.jpg">
+        <app-sidebar-cmp></app-sidebar-cmp>
+        <div class="sidebar-background" style="background-image: url(https://st2.depositphotos.com/39672126/48340/i/450/depositphotos_483408216-stock-photo-portrait-asian-male-financial-officer.jpg)"></div>
+    </div>
+    <div class="main-panel">
+        <app-navbar-cmp></app-navbar-cmp>
+        <router-outlet></router-outlet>
+        <div *ngIf="!isMap()">
+            <app-footer-cmp></app-footer-cmp>
+        </div>
+    </div>
+    <app-fixedplugin></app-fixedplugin>
+</div>

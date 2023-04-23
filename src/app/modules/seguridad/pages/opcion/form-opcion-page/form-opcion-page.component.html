@@ -1,0 +1,110 @@
+<form autocomplete="on" >  
+  <div class="row">
+    <div class="col-md-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Version app</mat-label>
+        <mat-select [(value)]="versionDefault" 
+          (selectionChange)="onVersionChange($event)">
+          <mat-option *ngFor="let ver of versiones" [value]="ver.Version">
+            {{ver.Nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="this.stepService.StepTab"  (selectedIndexChange)="changeTab($event)">
+            <mat-tab label="Opciones">        
+              <div class="contrainer-fluid">                                    
+                <div class="row">
+                      <div class="col-md-4">                        
+                        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+                            <button mat-icon-button disabled></button>
+                            <!-- {{node.title}} -->
+                            <mat-checkbox class="checklist-leaf-node"
+                                          [checked]="checklistSelection.isSelected(node)"
+                                          (change)="todoLeafItemSelectionToggle(node)">{{node.title}}</mat-checkbox>
+
+                            <button mat-icon-button (click)="addNewOption(node)" *ngIf="!node.isboton" ><mat-icon>note_add</mat-icon></button>
+                            <button mat-icon-button (click)="addNewOption(node)" > <mat-icon>add</mat-icon></button>                
+
+                          </mat-tree-node>            
+                          
+                          <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+                            <button mat-icon-button disabled></button>
+                            <div class="row">                  
+                              <div class="col-md-2">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Nombre</mat-label>
+                                  <input matInput #NombreNvo placeholder="Ex. Lettuce">
+                                </mat-form-field>
+                              </div>                    
+                              <div class="col-md-4">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Ruta</mat-label>
+                                  <input matInput #DescripcionNvo placeholder="Ex. Lettuce">
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-2">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Version</mat-label>
+                                  <input matInput #NombreNvo placeholder="Ex. Lettuce">
+                                </mat-form-field>
+                              </div>  
+                              <div class="col-md-1">
+                                <button mat-button (click)="saveNode(node, NombreNvo.value)">Grabar</button>
+                              </div>
+                            </div>                
+                          </mat-tree-node>
+                        
+                          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                            <button mat-icon-button matTreeNodeToggle
+                                    [attr.aria-label]="'Toggle ' + node.title">
+                              <mat-icon class="mat-icon-rtl-mirror">
+                                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                              </mat-icon>
+                            </button>
+                            <!-- {{node.title}} -->
+                            <mat-checkbox [checked]="descendantsAllSelected(node)"
+                                          [indeterminate]="descendantsPartiallySelected(node)"
+                                          (change)="todoItemSelectionToggle(node)">{{node.title}}</mat-checkbox>
+
+                            <button mat-icon-button (click)="addNewOption(node)" *ngIf="!node.isboton" ><mat-icon>note_add</mat-icon></button>
+                          </mat-tree-node>
+                        </mat-tree>
+                      </div>
+                      <div class="col-md-8">
+                        <button mat-raised-button class="btn" (click)="crearOpcion()">Crear módulo o opción<mat-icon>create_new_folder</mat-icon></button>
+                        <button mat-raised-button class="btn" (click)="EditarModulo()">Editar módulo o opción<mat-icon>edit</mat-icon></button>
+                      </div>
+                   </div>
+                 </div>
+            </mat-tab>
+            <mat-tab label="Ordenamiento">
+              <div class="contrainer-fluid">                                    
+                <div class="row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-2">
+                    <button mat-raised-button class="btn" (click)="guardarOrdenamiento()">Guardar<mat-icon>save</mat-icon></button>
+                  </div>
+                  <div class="col-md-5">
+                  
+                      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                        <div class="example-box" *ngFor="let obj of opcionOrder" cdkDrag>
+                          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                          {{obj.Nombre}}
+                        </div>
+                      </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+         </div>
+      </div>
+    
+</form>

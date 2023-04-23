@@ -1,0 +1,275 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+  </div>
+  <div class="form-group- row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-rose card-header-icon">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="card-icon"><i class="material-icons">person_add</i></div>
+               <h4 class="card-title"> {{ titulocategoria }}</h4>
+             </div>
+             <div class="col-md-3">
+              <h2 class="card-title">{{ codsolicitud }}</h2>
+           </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ subtitulo }}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <form autocomplete="on" [formGroup]="formularionewcategoria" *ngIf="showregiscateg" class="form-horizontal w-100 p-md-4 p-4" (ngSubmit)="guardarcategoria()">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <button mat-raised-button class="btn btn-info"  routerLink="/administracion/horatrabajo/">
+                          <mat-icon>block</mat-icon>
+                          Cancelar
+                        </button>
+                        <button mat-raised-button class="btn btn-primary">
+                          {{btnguar}}
+                        </button>
+                      </div>
+
+                    </div>
+
+
+                      <fieldset class="form-group p-3 mt-3">
+                        <legend class="w-auto px-2">NUEVO HORARIO</legend>
+                        <div class="row mt-3">
+                          <div class="col-md-8">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Nombre</mat-label>
+                              <input matInput [(ngModel)]="nombretxt"
+                              formControlName="stamanenombre" [formControl]="stamanenombre" required>
+                              <mat-error *ngIf="stamanenombre.get('stamanenombre')?.hasError('required')">
+                                Es necesario completar el nombre!
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Estado</mat-label>
+                              <mat-select formControlName="stmaneestado"  required [(ngModel)]="estadointtxt" (selectionChange)="chaneestadocel($event)">
+                               <!-- <mat-option *ngFor="let estado of lstEstadonewcatgoria" [value]="estado.idMaestroDetalle">
+                                  {{estado.stNombre}}
+                                </mat-option>-->
+                                <mat-option *ngFor="let estado of estadocategoria" [value]="estado.value" >
+                                  {{estado.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                             <!--<mat-error *ngIf="formularionewcategoria.get('stmaneestado')?.hasError('required')">
+                                Seleccione el estado!
+                              </mat-error>-->
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8">
+                            <mat-form-field appearance="outline">
+                              <mat-label>horario</mat-label>
+                              <input matInput [(ngModel)]="newdescripciontxt"
+                              formControlName="stamanewcategoria" [formControl]="stamanewcategoria" required>
+                              <mat-error *ngIf="stamanewcategoria.get('stamanewcategoria')?.hasError('required')">
+                                Es necesario completar este campo!
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                        <div class="col-md-2">
+                          <section class="example-section">
+                            <mat-checkbox class="example-margin" (change)="selcttodoslosdias($event)">
+                             <label for=""> Días</label>
+                            </mat-checkbox>
+                        </section>
+                          </div>
+                        <div class="col-md-3 text-center">Desde</div>
+                        <div class="col-md-3 text-center">Hasta</div>
+                      </div>
+                        <div class="row mt-3">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedlunes" (change)="changedias($event,1)">
+                                    <label for=""> Lunes</label>
+                                  </mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                              <mat-form-field color="warn" appearance="outline">
+                                  <mat-label>Hora Inicio</mat-label>
+                                  <input matInput [ngxTimepicker]="picker" [(ngModel)]="Houriniciolunes"[formControl]="stamanehouriniciolunes" [format]="24" formControlName="stamanehouriniciolunes">
+                                  <ngx-material-timepicker #picker (timeChanged)="timeiniciolunes($event)"></ngx-material-timepicker>
+
+                              </mat-form-field>
+                            </div>
+                            <!--<div class="col-md-3 text-center">
+                                <input  type="time" (change)="timeiniciolunes($event)" [(ngModel)]="Houriniciolunes" [formControl]="stamanehouriniciolunes" formControlName="stamanehouriniciolunes">
+                            </div>-->
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker1" [format]="24" [(ngModel)]="Hourfinlunes"[formControl]="stamanehourfinlunes" formControlName="stamanehourfinlunes">
+                              <ngx-material-timepicker #picker1 (timeChanged)="timefinlunes($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedmartes" (change)="changedias($event,2)">
+                                    <label for="">Martes</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker2" [format]="24" [(ngModel)]="Houriniciomartes"[formControl]="stamanehouriniciomartes" formControlName="stamanehouriniciomartes">
+                              <ngx-material-timepicker #picker2 (timeChanged)="timeiniciomartes($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker3" [format]="24" [(ngModel)]="Hourfinmartes"[formControl]="stamanehourfinmartes" formControlName="stamanehourfinmartes">
+                              <ngx-material-timepicker #picker3 (timeChanged)="timefinmartes($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedmiercoles" (change)="changedias($event,3)">
+                                   <label for="">Miercoles</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker4" [format]="24" [(ngModel)]="Houriniciomiercoles"[formControl]="stamanehouriniciomiercoles" formControlName="stamanehouriniciomiercoles">
+                              <ngx-material-timepicker #picker4 (timeChanged)="timeiniciomiercoles($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker5" [format]="24" [(ngModel)]="Hourfinmiercoles"[formControl]="stamanehourfinmiercoles" formControlName="stamanehourfinmiercoles">
+                              <ngx-material-timepicker #picker5 (timeChanged)="timefinmiercoles($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedjueves" (change)="changedias($event,4)">
+                                  <label for="">Jueves</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker6" [format]="24" [(ngModel)]="Houriniciojueves"[formControl]="stamanehouriniciojueves" formControlName="stamanehouriniciojueves">
+                              <ngx-material-timepicker #picker6 (timeChanged)="timeiniciojueves($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker7" [format]="24" [(ngModel)]="Hourfinjueves"[formControl]="stamanehourfinjueves" formControlName="stamanehourfinjueves">
+                              <ngx-material-timepicker #picker7 (timeChanged)="timefinjueves($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedviernes" (change)="changedias($event,5)">
+                                   <label for="">Viernes</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker8" [format]="24" [(ngModel)]="Hourinicioviernes"[formControl]="stamanehourinicioviernes" formControlName="stamanehourinicioviernes">
+                              <ngx-material-timepicker #picker8 (timeChanged)="timeinicioviernes($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker9" [format]="24" [(ngModel)]="Hourfinviernes"[formControl]="stamanehourfinviernes" formControlName="stamanehourfinviernes">
+                              <ngx-material-timepicker #picker9 (timeChanged)="timefinviernes($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chcedsabado" (change)="changedias($event,6)">
+                                   <label for="">Sabado</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker10" [format]="24" [(ngModel)]="Houriniciosabado"[formControl]="stamanehouriniciosabado" formControlName="stamanehouriniciosabado">
+                              <ngx-material-timepicker #picker10 (timeChanged)="timeiniciosabado($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker11" [format]="24" [(ngModel)]="Hourfinsabado"[formControl]="stamanehourfinsabado" formControlName="stamanehourfinsabado">
+                              <ngx-material-timepicker #picker11 (timeChanged)="timefinsabado($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2">
+                                <section class="example-section">
+                                  <mat-checkbox class="example-margin" [checked]="chceddomingo" (change)="changedias($event,7)">
+                                    <label for="">Domingo</label></mat-checkbox>
+                              </section>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Inicio</mat-label>
+                              <input matInput [ngxTimepicker]="picker12" [format]="24" [(ngModel)]="Houriniciodomingo"[formControl]="stamanehouriniciodomingo" formControlName="stamanehouriniciodomingo">
+                              <ngx-material-timepicker #picker12 (timeChanged)="timeiniciodomingo($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 text-center">
+                            <mat-form-field color="warn" appearance="outline">
+                              <mat-label>Hora Fin</mat-label>
+                              <input matInput [ngxTimepicker]="picker13" [format]="24" [(ngModel)]="Hourfindomingo"[formControl]="stamanehourfindomingo" formControlName="stamanehourfindomingo">
+                              <ngx-material-timepicker #picker13 (timeChanged)="timefindomingo($event)"></ngx-material-timepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                      </fieldset>
+
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

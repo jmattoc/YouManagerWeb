@@ -1,0 +1,411 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="card-icon"><i class="material-icons">mobile_friendly</i></div>
+                 <h4 class="card-title">
+                  {{titulo}}
+                </h4>
+               </div>
+             </div>
+            </div>
+               <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <mat-toolbar *ngIf="showmattoolbarcodigoactivo">
+                      <h1>{{codautogenerado}}</h1>
+                      <span class="spacer"></span>
+                      <mat-chip-list>
+                        <mat-chip style="background-color: #156185;" class="text-white">  {{nombretipo}} </mat-chip>
+                      </mat-chip-list>
+                    </mat-toolbar>
+                    <mat-tab-group animationDuration = "2000ms">
+                      <mat-tab [label]="subtitulo" >
+                        <form autocomplete="on" [formGroup]="datosBasicosFormGroup" class="form-horizontal w-100 p-md-4 p-4" (ngSubmit)="guardarcel(formDirective)" #formDirective="ngForm">
+                        <div class="row mt-3">
+                          <div class="col-md-9">
+                            <button mat-raised-button class="btn btn-info float-left" routerLink="/activos/bandequipo/">
+                              <mat-icon>block</mat-icon>
+                              Cancelar
+                            </button>
+                           <!-- <button mat-raised-button class="btn btn-warning float-right" (click)="bandejaequipo()">
+                              <mat-icon>mood</mat-icon>
+                              Baja de Equipo
+                            </button> -->
+                            <!--<button mat-raised-button class="btn  btn-primary float-left"  [routerLink]="['/activos/bandequipo']">
+                              <mat-icon>directions_transit</mat-icon>
+                              Ir a bandeja
+                            </button>-->
+                            <button mat-raised-button class="btn  float-left" *ngIf="showbtneditar" (click)="editarcontrol()">
+                              Editar
+                            </button>
+                            <button mat-raised-button class="btn  float-left" *ngIf="showbtnguardar">
+                              {{ btnguar }}
+                            </button>
+
+                          </div>
+                          <div class="col-md-3 float-right"><h1 style="color:cornflowerblue;"> </h1>
+                          </div>
+                        </div>
+                        <fieldset class="form-group p-3">
+                          <legend class="w-auto px-2">DATOS GENERALES</legend>
+                           <div class="row mt-3">
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Código Inventario</mat-label>
+                                    <input matInput [(ngModel)]="codinventariotxt"
+                                    formControlName="stamanecodinventario" [formControl]="stamanecodinventario" required >
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamanecodinventario')?.hasError('required')">
+                                      Es necesario completar el Cod. inventario!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field color="warn" appearance="outline">
+                                    <mat-label>Fecha de Alta</mat-label>
+                                    <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker" placeholder="dd/mm/aaaa" formControlName="stamanefechaalta" [formControl]="stamanefechaalta" required [max]="maxDate" [(ngModel)]="fechaaltatxt">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker ></mat-datepicker>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stamanefechaalta')?.hasError('required')">
+                                      Es necesario completar la fecha de alta!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Tiempo maximo operativo</mat-label>
+                                    <input matInput [(ngModel)]="tmotxt"
+                                    formControlName="stmanetmo" [formControl]="stmanetmo" required placeholder="meses">
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanetmo')?.hasError('required')">
+                                      Select Cant. de meses!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-select formControlName="stmaneestado"  required [(ngModel)]="estadoint" (selectionChange)="chaneestadocel($event)">
+                                      <mat-option *ngFor="let estado of lstEstadoCel" [value]="estado.idMaestroDetalle">
+                                        {{estado.stNombre}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmaneestado')?.hasError('required')">
+                                      Seleccione el estado!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2" *ngIf="showcontroltipoactivo">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Tipo de Activo</mat-label>
+                                    <mat-select formControlName="stmanetipoactivo"  required [(ngModel)]="idtipoactivopclaptop" (selectionChange)="chanelidtipoactivo($event)">
+                                      <mat-option [value]="1" >CELULARES</mat-option>
+                                      <mat-option [value]="2" >LAPTOPS</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                           </div>
+                      </fieldset>
+                        <br>
+                        <div class="row" *ngIf="idtipoactivo == 1">
+                                  <div class="col-md-6">
+                                    <fieldset class="form-group tocol">
+                                      <legend class="w-auto px-2">DATOS DE EQUIPO</legend>
+                                        <div class="col-md-12" >
+                                          <div class="row">
+                                              <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                  <mat-label>Marca</mat-label>
+                                                  <mat-select formControlName="stmanemarcacelular" [formControl]="stmanemarcacelular" required [(ngModel)]="stmarcacelular" (selectionChange)="chanemarcacel($event)" ngDefaultControl>
+                                                    <mat-option>
+                                                      <ngx-mat-select-search
+                                                        [formControl]="marcacelFilterCtrl"
+                                                       placeholder="Buscar Celular"></ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option *ngFor="let lista of filterlstequipocelular | async" [value]="lista.fkMaestroDetalle">
+                                                      {{lista.stNombre}}
+                                                    </mat-option>
+                                                  </mat-select>
+                                                  <mat-error *ngIf="datosBasicosFormGroup.get('stmanemarcacelular')?.hasError('required')">
+                                                    Seleccione Marca celular!
+                                                  </mat-error>
+                                                </mat-form-field>
+                                              </div>
+                                              <div class="col-md-6">
+                                                  <div class="semaforo">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                  <mat-form-field appearance="outline">
+                                                    <mat-label>Modelo</mat-label>
+                                                    <mat-select formControlName="stmanemodelocelular" [formControl]="stmanemodelocelular" [(ngModel)]="stmodelocelular"  required (selectionChange)="chanemodelocel($event)" ngDefaultControl>
+                                                      <mat-option>
+                                                        <ngx-mat-select-search
+                                                          [formControl]="modelocelFilterCtrl"
+                                                         placeholder="Buscar Celular"></ngx-mat-select-search>
+                                                      </mat-option>
+                                                      <mat-option *ngFor="let modelo of filterlstmodelocelular | async" [value]="modelo.idMaestroDetalle">
+                                                        {{modelo.stNombre}}
+                                                      </mat-option>
+                                                    </mat-select>
+                                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanemodelocelular')?.hasError('required')">
+                                                      Seleccione el Modelo!
+                                                    </mat-error>
+                                                  </mat-form-field>
+                                                </div>
+                                                <div class="col-md-6">
+                                                  <mat-form-field appearance="outline">
+                                                    <mat-label>Memoria Adicional</mat-label>
+                                                    <input matInput [(ngModel)]="capMemory" placeholder="Cant. Gb"
+                                                    formControlName="stmanememorycard" [formControl]="stmanememorycard" required >
+                                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanememorycard')?.hasError('required')">
+                                                      Select Cant. Gb!
+                                                    </mat-error>
+                                                  </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                  <mat-label>Nro. Serie</mat-label>
+                                                  <input matInput [(ngModel)]="nroSerie"  placeholder=""
+                                                  formControlName="stmanenroserie" [formControl]="stmanenroserie" required >
+                                                  <mat-error *ngIf="datosBasicosFormGroup.get('stmanenroserie')?.hasError('required')">
+                                                    Ingrese el numero de serie!
+                                                  </mat-error>
+                                                </mat-form-field>
+                                              </div>
+                                              <div class="col-md-6">
+                                                <section class="example-section">
+                                                  <mat-label>Accesorios Adicionales</mat-label>
+                                                  <span class="example-list-section">
+                                                    <ul class="registercel">
+                                                      <li>
+                                                        <mat-checkbox [value]="task.subtasks[0].id" [checked] = "task.subtasks[0].selected"                                    [color]="task.subtasks[0].color" formControlName="stmaneaccesorioscpu1"
+                                                                      (ngModelChange)="updateAllComplete($event,task.subtasks[0].id)">
+                                                          {{task.subtasks[0].name}}
+                                                        </mat-checkbox>
+                                                      </li>
+                                                      <li>
+                                                        <mat-checkbox [value]="task.subtasks[1].id" [checked] = "task.subtasks[1].selected"                                    [color]="task.subtasks[1].color" formControlName="stmaneaccesorioscpu2"
+                                                                      (ngModelChange)="updateAllComplete($event,task.subtasks[1].id)">
+                                                          {{task.subtasks[1].name}}
+                                                        </mat-checkbox>
+                                                      </li>
+                                                      <li>
+                                                        <mat-checkbox [value]="task.subtasks[2].id" [checked] = "task.subtasks[2].selected"                                    [color]="task.subtasks[2].color" formControlName="stmaneaccesorioscpu3"
+                                                                      (ngModelChange)="updateAllComplete($event,task.subtasks[2].id)">
+                                                          {{task.subtasks[2].name}}
+                                                        </mat-checkbox>
+                                                      </li>
+                                                    </ul>
+                                                  </span>
+                                                </section>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                  <mat-label>IMEI</mat-label>
+                                                  <input matInput [(ngModel)]="emaitxt" placeholder=""
+                                                  formControlName="stmaneimei" [formControl]="stmaneimei" required >
+                                                  <mat-error *ngIf="datosBasicosFormGroup.get('stmaneimei')?.hasError('required')">
+                                                    Ingrese el EMEI!
+                                                  </mat-error>
+                                                </mat-form-field>
+                                              </div>
+                                              <div class="col-md-6"></div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6" >
+                                  <fieldset class="form-group tocol" >
+                                    <legend class="w-auto px-2">DATOS DE OPERADOR</legend>
+                                      <div class="col-md-12">
+                                        <div class="row">
+                                          <div class="col-md-6">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Operador</mat-label>
+                                              <mat-select formControlName="stmanemaoperador"  required [(ngModel)]="idOperador" (selectionChange)="chaneoperdorel($event)">
+                                                <mat-option *ngFor="let operador of lstoperadorcel" [value]="operador.idMaestroDetalle" >
+                                                  {{operador.stNombre}}
+                                                </mat-option>
+                                              </mat-select>
+                                              <mat-error *ngIf="datosBasicosFormGroup.get('stmanemaoperador')?.hasError('required')">
+                                                Seleccione el Operador!
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-md-4">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Nro SIM</mat-label>
+                                              <input matInput placeholder=""
+                                              formControlName="stmanenrosim" [formControl]="stmanenrosim" required [(ngModel)]="nrosimtxt">
+                                              <mat-error *ngIf="datosBasicosFormGroup.get('stmanenrosim')?.hasError('required')">
+                                                Ingrese Nro SIM!
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-10">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Plan / Tarifa</mat-label>
+                                              <input matInput placeholder=""
+                                              formControlName="stmanetarifa" [formControl]="stmanetarifa" required [(ngModel)]="tarifaplana" >
+                                              <mat-error *ngIf="datosBasicosFormGroup.get('stmanetarifa')?.hasError('required')">
+                                                Ingrese Plan / Tarifa!
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-10">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Categoría</mat-label>
+                                              <mat-select formControlName="stmanecategoria"  required [(ngModel)]="idcategoriaint" (selectionChange)="chanecategoriacel($event)">
+                                                <mat-option *ngFor="let categoria of lstcategoriaemplecel" [value]="categoria.idMaestroDetalle">
+                                                  {{categoria.stNombre}}
+                                                </mat-option>
+                                              </mat-select>
+                                              <mat-error *ngIf="datosBasicosFormGroup.get('stmanecategoria')?.hasError('required')">
+                                                Seleccione el Cargo de Categoría!
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </fieldset>
+                                </div>
+                        </div>
+                          <fieldset class="form-group  p-3" *ngIf="idtipoactivo == 2">
+                            <legend class="w-auto px-2">CARACTERISTICAS DE LAPTOP</legend>
+                              <div class="row mt-2">
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Marca de Laptop</mat-label>
+                                    <mat-select formControlName="stmanemarcalaptop" [formControl] ="stmanemarcalaptop" required (selectionChange)="chaemarcalaptop($event)" [(ngModel)]="selectIdmarcatxt"ngDefaultControl>
+                                      <mat-option>
+                                        <ngx-mat-select-search
+                                          [formControl]="marcacelFilterCtrl"
+                                         placeholder="Buscar laptops"></ngx-mat-select-search>
+                                      </mat-option>
+                                      <mat-option *ngFor="let listar of filterlstmarcalaptop | async" [value]="listar.idMaestroDetalle">{{listar.stNombre}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Serie</mat-label>
+                                    <input matInput [(ngModel)]="serielaptoptxt"
+                                    formControlName="stmaneserielaptop" [formControl]="stmaneserielaptop" required placeholder="">
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanecolorlaptop')?.hasError('required')">
+                                      Ingrese el color de la Laptop!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Tamaño Pantalla</mat-label>
+                                    <input matInput [(ngModel)]="tamanolaptoptxt"
+                                    formControlName="stmanetamanolaptop"
+                                    [formControl]="stmanetamanolaptop" required placeholder="Pulgadas">
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanetamanolaptop')?.hasError('required')">
+                                      Ingrese las pulgadas de la Laptop!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Disco Duro</mat-label>
+                                    <input matInput [(ngModel)]="discodurolaptoptxt"
+                                    formControlName="stmanediscodurolaptop" [formControl]="stmanediscodurolaptop" required placeholder="Disco duro">
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanediscodurolaptop')?.hasError('required')">
+                                      Ingrese las pulgadas de la Laptop!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Memoria Ram</mat-label>
+                                    <input matInput [(ngModel)]="memorialaptoptxt"
+                                    formControlName="stmanememorialaptop" [formControl]="stmanememorialaptop" required placeholder="Memoria">
+                                    <mat-error *ngIf="datosBasicosFormGroup.get('stmanememorialaptop')?.hasError('required')">
+                                      Ingrese la capacidad de mamoria!
+                                    </mat-error>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                  <section class="example-section">
+                                    <mat-label>Accesorios Adicionales</mat-label>
+                                    <span class="example-list-section">
+                                      <ul class="registercel">
+                                        <li>
+                                          <mat-checkbox [value]="task.subtaskstwo[0].id"
+                                                        [color]="task.subtaskstwo[0].color"
+                                                        (ngModelChange)="updateAllCompletetwo($event,task.subtaskstwo[0].id)" formControlName="stmaneaccesorioslaptop1">
+                                            {{task.subtaskstwo[0].name}}
+                                          </mat-checkbox>
+                                        </li>
+                                        <li>
+                                          <mat-checkbox [value]="task.subtaskstwo[1].id"
+                                                        [color]="task.subtaskstwo[1].color"
+                                                        (ngModelChange)="updateAllCompletetwo($event,task.subtaskstwo[1].id)" formControlName="stmaneaccesorioslaptop2">
+                                            {{task.subtaskstwo[1].name}}
+                                          </mat-checkbox>
+                                        </li>
+                                        <li>
+                                          <mat-checkbox [value]="task.subtaskstwo[2].id"
+                                                        [color]="task.subtaskstwo[2].color"
+                                                        (ngModelChange)="updateAllCompletetwo($event,task.subtaskstwo[2].id)" formControlName="stmaneaccesorioslaptop3">
+                                            {{task.subtaskstwo[2].name}}
+                                          </mat-checkbox>
+                                        </li>
+                                      </ul>
+                                    </span>
+                                  </section>
+                                </div>
+
+                              </div>
+
+
+
+                          </fieldset>
+                        </form>
+                      </mat-tab>
+                      <mat-tab label="Asignaciones" *ngIf="showasignaciones && idtipoactivo == 1 || idtipoactivo == 2">
+                            <app-asignaciones [idactivo]="id" [codigoActivo]="codautogenerado" ></app-asignaciones>
+                      </mat-tab>
+                      <mat-tab label="Penalidades" *ngIf="showpenalidades && idtipoactivo == 1 || idtipoactivo == 2">
+                            <app-penalidades></app-penalidades>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </div>
+                </div>
+
+                <div class="row tm-3">
+                  <div class="col-md-12">
+
+                  </div>
+                </div>
+               </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

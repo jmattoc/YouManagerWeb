@@ -1,0 +1,112 @@
+<link href="../dialog-historial-ausencia/dialog-historial-ausencia.component.css" media="print" rel="stylesheet" />
+<div>
+<h4 mat-dialog-title class="dialog-headline scctitle">
+  <mat-toolbar role="toolbar" class="dialog-header">
+    <span> {{data.titulo}}</span>
+    <span class="fx-spacer"></span>
+    <button mat-icon-button (click)="cerrarDialogo()">
+      <mat-icon mat-list-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+</h4>
+  <div mat-dialog-content id="content-body" >
+    <div class="container-fluid">
+      <div class="form-horizontal">
+        <form autocomplete="on" [formGroup]="datosBasicosFormGroup" class="form-horizontal w-100 p-md-4 p-4">
+          <div class="row">
+            <div class="col-md-12">
+              <fieldset class="form-group p-3">
+                <legend class="w-auto px-2">DATOS GENERALES</legend>
+                <div class="row mt-3">
+                  <div class="col-md-10">
+                    <h3 style="text-transform: uppercase; color:#156185; font-weight: 500; text-align: center;">{{NombreEmpleado}}</h3>
+                  </div>
+                  <div class="col-md-2 float-right">
+                    <h3>{{CodigoEmpleado}}</h3>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <fieldset class="form-group p-3">
+                <legend class="w-auto px-2">Historial de ausencias</legend>
+
+                  <div class="table-container mt-3 text-center"  *ngIf="lsitarhistorial !=null" >
+                    <table mat-table [dataSource]="lsitarhistorial" class="mat-elevation-z8 tbhistorial" id="tablehistory">
+                      <ng-container matColumnDef="FechaInicio">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-150">Fecha Inicio </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-150 text-center">{{element.FechaInicio | date:'dd/MM/yyyy'}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="FechaFin">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-150">Fecha Fin </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-150 text-center">{{element.FechaFin | date:'dd/MM/yyyy'}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="FechaRegistro">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-150">Fecha registro </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-150 text-center">{{element.FechaRegistro | date:'dd/MM/yyyy'}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="cantidadDias">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-90">Cant. días </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-90 text-center">{{element.cantidadDias}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-230">Estado </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-230">{{element.estado}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="tipo">
+                        <th mat-header-cell *matHeaderCellDef class="table-column-230">Tipo ausencia </th>
+                        <td mat-cell *matCellDef="let element" class="table-column-230">{{element.tipo}}
+                        </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                      <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+                      <tr class="mat-row no-data-row" *matNoDataRow>
+                          <td class="mat-cell" colspan="6">No se encontraron registro.</td>
+                      </tr>
+                    </table>
+                      <div *ngIf="isLoading" class="spinner-container">
+                                <mat-progress-spinner
+                                  [diameter]="50"
+                                  color="primary"
+                                  mode="indeterminate">
+                                </mat-progress-spinner>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col-md-12">
+                          <table style="width: 50%; float:right;">
+                            <tr>
+                            <td style="text-transform: uppercase; color:#156185; font-weight: 500;"><h4>Total de dias aprobados:</h4> </td>
+                            <td style="text-transform: uppercase; color:#141986; font-weight: 500; float: left;"><h3> {{totalDiasAprobados}}</h3> </td>
+                            </tr>
+
+                          </table>
+                        </div>
+                      </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                   <!-- <button mat-raised-button class="btn btn-primary" style="float:right;" (click)="imprimirhistorial()">Imprimir</button> -->
+                  </div>
+
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+

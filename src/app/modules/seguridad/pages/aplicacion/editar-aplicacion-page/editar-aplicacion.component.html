@@ -1,0 +1,108 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="form-group row">
+      <div class="col-md-12">
+        <xng-breadcrumb></xng-breadcrumb>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="card-icon"><i class="material-icons">mail_outline</i></div>
+            <h4 class="card-title">EDITAR APLICACIONES</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="this.stepService.StepTab">
+                  <mat-tab label="General">
+                    <app-form-aplicacion-page [objRegistro]="objRegistro" (onGuardar)="actualizar($event)" *ngIf="objRegistro">
+                    </app-form-aplicacion-page>
+                  </mat-tab>
+                  <mat-tab label="Detalle(s)">    
+                    <div class="contrainer-fluid">                                    
+                      <br>
+                       <div class="row">
+                        <div class="col-md-4">
+                          <table mat-table [dataSource]="listarEmailDto" class="mat-elevation-z8">                          
+                            <ng-container matColumnDef="userName">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-200"> userName</th>
+                              <td mat-cell *matCellDef="let element" class="table-column-200"> {{element.userName}}
+                              </td>
+                            </ng-container>
+                             
+                          <ng-container matColumnDef="password">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> password </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.password}}
+                              </td>
+                            </ng-container>                            
+                            <ng-container matColumnDef="displayName">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> displayName </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.displayName}}
+                              </td>
+                            </ng-container>                            
+                            <ng-container matColumnDef="host">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> host </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.host}}
+                              </td>
+                            </ng-container>                            
+                            <ng-container matColumnDef="port">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> port </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.port}}
+                              </td>
+                            </ng-container>                            
+                            <ng-container matColumnDef="enableSsl">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> enableSsl </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.enableSsl}}
+                              </td>
+                            </ng-container>                            
+                            <ng-container matColumnDef="from">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> from </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.from}}
+                              </td>
+                            </ng-container>                             
+                            <tr mat-header-row *matHeaderRowDef="columnasEmail"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnasEmail;"></tr>
+                            <tr class="mat-row no-data-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="5">No se encontraron
+                                    registro.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div> 
+
+                      <div class="row">
+                        <div class="col-md-4">
+                          <table mat-table [dataSource]="listarVersionDto" class="mat-elevation-z8">                          
+                            <ng-container matColumnDef="Version">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-200"> Version</th>
+                              <td mat-cell *matCellDef="let element" class="table-column-200"> {{element.Version}}
+                              </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Nombre">
+                              <th mat-header-cell *matHeaderCellDef class="table-column-150"> Nombre </th>
+                              <td mat-cell *matCellDef="let element" class="table-column-150"> {{element.Nombre}}
+                              </td>
+                            </ng-container>                            
+                            <tr mat-header-row *matHeaderRowDef="columnasVersion"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnasVersion;"></tr>
+                            <tr class="mat-row no-data-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="5">No se encontraron
+                                    registro.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                      </div>         
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
